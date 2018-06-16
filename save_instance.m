@@ -1,4 +1,4 @@
-% batch processing of ProTrack *.p2x files to (parsed) *.mat files as an input for simulation
+% batch processing of ProTrack *.p2x files to *.mat files (parsed) as an input for simulation
 % input: <folder name> containing files in the given format and extension
 % output: parsed *.mat file for each input file stored in ../<folder name>/output folder
 % example: save_instance('ProTrack')
@@ -37,5 +37,3 @@ for i=1:size(files,1) % iterate through all files in given directory
     
     end % simulation types
 end % all files
-
-
