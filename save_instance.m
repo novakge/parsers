@@ -1,4 +1,4 @@
-% batch processing of ProTrack *.p2x files to *.mat files (parsed) as an input for simulation
+% batch processing of ProTrack *.p2x files to (parsed) *.mat files as an input for simulation
 % input: <folder name> containing files in the given format and extension
 % output: parsed *.mat file for each input file stored in ../<folder name>/output folder
 % example: save_instance('ProTrack')
@@ -25,15 +25,16 @@ for i=1:size(files,1) % iterate through all files in given directory
        
     [~,filename,~] = fileparts(fullfile(files(i,1).folder,files(i,1).name)) % get filename without extension
     
-    [PDM, constr] = parse_protrack(fullfile(files(i,1).folder,files(i,1).name),j); % parse all files for all simulation types
-    
-    save(strcat(fullfile(files(i,1).folder,out_dir,filename),'_',TP(1,j)),'PDM','constr'); % save each variable "PDM" to the <folder name>/output folder
+    [PDM, constr, num_r_resources, num_modes] = parse_protrack(fullfile(files(i,1).folder,files(i,1).name),j); % parse all files for all simulation types
+    save(strcat(fullfile(files(i,1).folder,out_dir,filename),'_',TP(1,j)),'PDM','constr','num_r_resources','num_modes'); % save each variable "PDM" to the <folder name>/output folder
     
     if (j == 1) % save DSM only once per file
-    DSM = parse_protrack(fullfile(files(i,1).folder,files(i,1).name),0); % parse only DSM
-    save(strcat(fullfile(files(i,1).folder,out_dir,filename),'_DSM'),'DSM');
+        DSM = parse_protrack(fullfile(files(i,1).folder,files(i,1).name),0); % parse only DSM
+        save(strcat(fullfile(files(i,1).folder,out_dir,filename),'_DSM'),'DSM');
     end
 
     
     end % simulation types
 end % all files
+
+

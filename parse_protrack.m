@@ -5,7 +5,7 @@
 % Example: >> PDM = parse_protrack('C2011-09 Commercial IT Project.p2x',1)
 % output: PDM file containing PDM = [DSM,TD,CD,{QD,RD}], format depending on the selected simulation type (trade-off problem)
 % Hint: to easily prepare e.g. test files, Excel<->ProTrack converter can be found at http://ghbonne.github.io/PMConverter
-function [PDM, constr] = parse_protrack(file_name, sim_type)
+function [PDM, constr, num_r_resources, num_modes] = parse_protrack(file_name, sim_type)
 
 % read xml as object from file
 xml = xmlread(file_name);
@@ -21,7 +21,7 @@ num_activities = act_nodes.getLength;
 
 % get number of resources = r
 res = xml.getElementsByTagName('Resource');
-num_resources = res.getLength;
+num_r_resources = res.getLength;
 
 % get number of resource assignments
 res_assign = xml.getElementsByTagName('ResourceAssignment');
@@ -34,8 +34,8 @@ num_relations = relations.item(1).getLength; % there are more relations than tas
 %%% pre-allocate data matrices
 project_data = zeros(num_activities,6); % pre-allocate n x 6 matrix for all related project data
 offset_data = zeros(num_activities,2); % pre-allocate n x 2 matrix for ids and their offsets
-unit_cost_data = zeros(num_resources,2); % pre-allocate r x 2 matrix for total resource costs per task in a separate matrix
-resource_data = zeros(num_activities,1+num_resources); % store resources and their data in a separate matrix
+unit_cost_data = zeros(num_r_resources,2); % pre-allocate r x 2 matrix for total resource costs per task in a separate matrix
+resource_data = zeros(num_activities,1+num_r_resources); % store resources and their data in a separate matrix
 
 %%% parse and calculate data
 % get xml -> activities -> activity #i -> ID, start time, duration, fixedcost
@@ -69,9 +69,17 @@ for i=1:size(offset_data,1)
     offset_data(i) = i; % put ID for all missing activities afterwards we have all the valid IDs stored
 end
 
+% get each resources' availability
+for i=0:num_r_resources - 1 % java style indexing, starting from zero
+    res_avail_node = res.item(i).getElementsByTagName('FIELD780'); % FIELD780 = resource availability e.g. programmers = 3 person
+
+    res_avail(1,i+1) = str2num(res_avail_node.item(0).getTextContent);
+end
+
 % get unit cost of each resource to calculate with
-for i=0:num_resources - 1 % java style indexing, starting from zero
+for i=0:num_r_resources - 1 % java style indexing, starting from zero
     res_id_node = res.item(i).getElementsByTagName('FIELD0'); % FIELD0 = resource ID e.g. 1 = programmers
+   
     unit_cost_node = res.item(i).getElementsByTagName('FIELD771'); % FIELD771 = resource unit cost
     
     unit_cost_data(i+1,1) = i+1; % put all IDs in original order in first column
@@ -102,7 +110,7 @@ end
 % calculate total cost for each task and resource
 for i=1:num_activities
     total_res_cost = 0;
-    for j=1:num_resources
+    for j=1:num_r_resources
         total_res_cost = total_res_cost + resource_data(i,j+1) * unit_cost_data(j,2);
     end
         
@@ -172,12 +180,24 @@ RD = project_data_sorted(:,9:end); % store column vector with resource demands n
 % initialize default constraint row vector
 constr = 0;
 
+% in real-life, there is only single mode
+num_modes = 1;
+
+% get resource constraints, Cr is the row vector of resource constraints
+Cr = 0; % initialize resource constraint with zero (valid) value, later will be a row vector containing renewable resource(s) availability
+if (num_r_resources > 0) % when there are renewable resources at all
+    for i=1:num_r_resources
+        Cr(1,i) = res_avail(1,i);
+    end
+end
+
+
 % put all relevant matrices together in a PDM depending on simulation type e.g. CTP,DTP,NTP
 switch sim_type
     case 1 % NTP
         
         PDM = [DSM,TD,CD,RD]; % QD is not available in original data
-        constr = [1,1,1,1]; % there is no real constraint here, maybe some theoretical one goes here [Ct=1,Cc=1,{Cq=1},{Cr=r},Cs=1]
+        constr = [999,999,Cr,1]; % there is no real constraint here, maybe some theoretical one [Ct=1,Cc=1,{Cq=1},{Cr=r},Cs=1]
         
     case 2 % CTP
         
@@ -186,12 +206,12 @@ switch sim_type
         RD = repelem(RD,1,2); % duplicate each column / resource demand to have lower/upper range as n x 2r matrix
         
         PDM = [DSM,TD,CD,RD];
-        constr = [1,1,1,1]; % there is no real constraint here, maybe some theoretical one goes here [Ct=1,Cc=1,{Cq=1},{Cr=r},Cs=1]
+        constr = [999,999,Cr,1]; % there is no real constraint, maybe some theoretical one goes here [Ct=1,Cc=1,{Cq=1},{Cr=r},Cs=1]
         
     case 3 % DTP
         
         PDM = [DSM,TD,CD,RD]; % number of modes is always "1" in this dataset, so leave it as it is
-        constr = [1,1,1,1]; % there is no real constraint here, maybe some theoretical one goes here [Ct=1,Cc=1,{Cq=1},{Cr=r},Cs=1]
+        constr = [999,999,Cr,1]; % there is no real constraint, maybe some theoretical one goes here [Ct=1,Cc=1,{Cq=1},{Cr=r},Cs=1]
         
     otherwise
         fprintf('Not a valid TP: only 1=NTP, 2=CTP, 3=DTP,  simulation types are supported!\n');
@@ -200,6 +220,7 @@ end
 
 % for debugging
 % resource_data;
+% num_modes;
 % project_data;
 % project_data_sorted;
 % DSM;
@@ -207,5 +228,6 @@ end
 % TD
 % RD
 % sim_type
+% constr
 
 end
