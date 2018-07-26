@@ -160,6 +160,8 @@ res_avail = cell2mat(res_avail); % convert to numeric values
 
 
 mode_count = 0;
+mode_count_row = 0;
+mode_count_col = 0;
 TD = 0; % preallocate where possible
 RD = 0; % preallocate where possible
 
@@ -167,24 +169,40 @@ RD = 0; % preallocate where possible
 num_nr_resources = 0; % TODO
 num_dc_resources = 0; % TODO
 
-% create all necessary matrices
-for i=1:num_activities
+% create all necessary matrices, start with RD
+for i=1:num_activities % loop through rows (activities)
+        
+    for j=1:num_r_resources+num_nr_resources+num_dc_resources % loop through columns (resources)
+        
+        for k=1:num_modes(i) % loop through modes (rows for different modes)
+            RD(i,mode_count_col+k) = res_mode_dur_req(mode_count_row+k,3+j);
+        end
+        mode_count_col = mode_count_col + num_modes(i);
+        
+    end
     
-    temp_row = 0; % start with blank, then reset for each row/line
-    k = 1; % need another counter incrementing with number of resources so far
+    mode_count_col = 0;
+    mode_count_row = mode_count_row + num_modes(i);
+        
+end
+
+% also create TD
+for i=1:num_activities % loop through all rows
     
-    for j=1:num_modes(i)
+    temp_row = 0; % start with a blank row, reset for each line
+
+    for j=1:num_modes(i) % loop through modes
         
         temp_row = res_mode_dur_req(mode_count+i+j-1,:); % select actual row according to mode
+        
         TD(i,j) = temp_row(1,3); % put durations of each mode in a row, n x w (modes)
-        RD(i,k:k + num_r_resources + num_nr_resources + num_dc_resources - 1) = temp_row(1,4:4+num_r_resources+num_nr_resources+num_dc_resources-1); % resource demands start at column 4, put each resource demand by mode in RD next to each other
-        k = k + num_r_resources + num_nr_resources + num_dc_resources; % increase offset with number of resources
     end
     
     % count modes so far as a relative offset
-    mode_count = mode_count + num_modes(i)-1; % there is always at least one mode: the row/line of given activity
+    mode_count = mode_count + num_modes(i) - 1; % there is always at least one mode: the row/line of given activity
 
 end
+
 
 % create initially an n x 1 CD matrix for cost demands; in case no cost data available, CD = "1" for all activities
 CD = zeros(num_activities,1);

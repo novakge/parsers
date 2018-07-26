@@ -53,10 +53,19 @@ function test_MMLIB_OWN_002(testCase)
 PDM = parse_xlib(testCase.TestData.MMLIB_OWN_002,3);
 actSolution = PDM;
        %[ DSM ] [  TD    ]  [CD ] [               RD                ]
-data = [1 1 1 1 11  22  33  1 1 1 5  6  7  8  9  10 11 12 13 14 15 16;
-        0 1 1 1 44  55  66  1 1 1 17 18 19 20 21 22 23 24 25 26 27 28;
-        0 0 1 1 77  88  99  1 1 1 29 30 31 32 33 34 35 36 37 38 39 40;
-        0 0 0 1 111 122 133 1 1 1 41 42 43 44 45 46 47 48 49 50 51 52];
+%data = [1 1 1 1 11  22  33  0 0 0 5  6  7  8  9  10 11 12 13 14 15 16;
+%        0 1 1 1 44  55  66  0 0 0 17 18 19 20 21 22 23 24 25 26 27 28;
+%        0 0 1 1 77  88  99  0 0 0 29 30 31 32 33 34 35 36 37 38 39 40;
+%       0 0 0 1 111 122 133 0 0 0 41 42 43 44 45 46 47 48 49 50 51 52];
+% reworked result to meet expectation of simulation: only renewable
+% resources considered
+
+       %[ DSM ] [  TD    ]  [CD ] [               RD                ]
+data = [1 1 1 1 11  22  33  0 0 0 5  9  13  6  10  14;
+        0 1 1 1 44  55  66  0 0 0 17 21 25 18 22 26 ;
+        0 0 1 1 77  88  99  0 0 0 29 33 37 30 34 38 ;
+        0 0 0 1 111 122 133 0 0 0 41 45 49 42 46 50];
+
 expSolution = data;
 verifyEqual(testCase,actSolution,expSolution,'AbsTol',0.01)
 end
@@ -72,11 +81,11 @@ end
 function test_PSPLIB_OWN_001(testCase)
 PDM = parse_xlib(testCase.TestData.PSPLIB_OWN_001,3);
 actSolution = PDM
-       %[ DSM ] [  TD    ][CD ] [        RD                  ]
-data = [1 1 1 1 1  2   3  1 1 1 1  2  3  4  5  6  7   8   9;
-        0 1 1 1 4  5   6  1 1 1 10 11 12 13 14 15 16  17  18;
-        0 0 1 1 7  8   9  1 1 1 19 20 21 22 23 24 25  26  27;
-        0 0 0 1 10 11  12 1 1 1 28 29 30 31 32 33 341 351 361];
+       %[ DSM ] [  TD    ][CD ] [        RD       ]
+data = [1 1 1 1 1  2   3  0 0 0 1  4  7  2  5  8; % remark: renewable / doubly constrained resources are omitted for our simulation
+        0 1 1 1 4  5   6  0 0 0 10 13 16 11 14 17;
+        0 0 1 1 7  8   9  0 0 0 19 22 25 20 23  26;
+        0 0 0 1 10 11  12 0 0 0 28 31 341 29 32 351 ];
 expSolution = data;
 verifyEqual(testCase,actSolution,expSolution,'AbsTol',0.01)
 end
