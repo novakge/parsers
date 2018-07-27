@@ -18,3 +18,8 @@ fprintf('done!\n');
 toc;
 
 % any additional dataset goes here
+
+% zip all resulting files in output.zip for easier upload
+fprintf('zipping all files...\n');
+zip('output.zip','data');
+fprintf('done!\n');
