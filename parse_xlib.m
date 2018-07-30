@@ -166,6 +166,7 @@ TD = 0; % preallocate where possible
 RD = 0; % preallocate where possible
 
 % warning: deviation from original data: remove nonrenewable and doubly constrained resource types temporarily: not supported
+% to use all supported resource types, use row below and remove comment
 num_nr_resources = 0; % TODO
 num_dc_resources = 0; % TODO
 
@@ -230,46 +231,35 @@ switch sim_type
         TD = TD(:,1); % for NTP, only one mode is considered with one duration column
         
         % for NTP, only one mode is considered with the demand of first modes for all resources
-        RD = RD(:,1:num_r_resources); % deviation from original dataset's structure: for this simulation, only renewable resources are supported
-        
-        % to use all supported resource types, use row below and remove comment
-        % RD = RD(:,1:num_r_resources + num_nr_resources + num_dc_resources);
+        RD = RD(:,1:num_r_resources + num_nr_resources + num_dc_resources); % deviation from original dataset's structure: for this simulation, only renewable resources are supported
         
         PDM = [DSM,TD,CD,RD];
 
-        constr = [999,999,Cr,1]; % [Ct=1,Cc=1,{Cq=1},{Cr=r},Cs=1]
+        constr = [-1,-1,Cr,1]; % [Ct=1,Cc=1,{Cq=1},{Cr=r},Cs=1]
         
     case 2 % CTP
         
         % resource lower and upper values are from the first and last mode (maximum time, minimum resource)
         CD = [CD, CD]; % duplicate a "dummy" CD to have lower/upper range cost as n x 2 matrix, as it is not part of the original dataset/instance
         TD = [TD(:,1) TD(:,max(num_modes))]; % adapt TD to have lower/upper range as n x 2 matrix given by first mode and last mode's value
-        RD_2 = 0; % for upper range of each resources demands, of the first and last (wth) mode
         
-        % get resource demands for every wth mode
-        mode_count = 1;
+        RD_2 = zeros(num_activities,(num_r_resources+num_nr_resources+num_dc_resources)*2); % pre-allocate for each resources demands, upper/lower range determined by the first and last (wth) mode
         
-        for i=1:num_activities
-            temp_row1 = res_mode_dur_req(mode_count,:); % copy first mode's row of resource demand for renewable resources only
-            temp_row2 = res_mode_dur_req(mode_count+num_modes(i)-1,:); % copy last mode's row of resource demand for renewable resources only
-            
-            temp_row1 = temp_row1(1, 4:4+num_r_resources-1); % resource demands start at column 4, put each resource demand by mode in RD next to each other
-            temp_row2 = temp_row2(1, 4:4+num_r_resources-1); % resource demands start at column 4, put each resource demand by mode in RD next to each other
-            
-            if (i > 1)
-                RD_2 = [RD_2; temp_row2, temp_row1]; % append resource demands
-            else
-                RD_2 = [temp_row2, temp_row1]; % add first resource demands
+        I = 1; % always start with 1st resource 1st mode
+        % create list of indices for resource demands first and last modes for all resource types except NR and DC
+        for i = 1:num_r_resources*num_modes(1,1)
+            if (mod(i,num_modes(1,1)) < 2) && (i > 1) % select every first and last mode of each resource, e.g. with 3 resources and w=4 modes, 1,,,,4;5,,,,9,10,,,,14
+                I = [I, i];
             end
-
-            mode_count = mode_count + num_modes(i);
         end
         
+        % put resource demands of specific columns from our previous list of indices
         % RD has lower/upper range as n x nR matrix given by first mode and last mode's value
+        RD_2 = RD(:,[I]);
         
         PDM = [DSM,TD,CD,RD_2];
 
-        constr = [999,999,Cr,1]; % [Ct=1,Cc=1,{Cq=1},{Cr=r},Cs=1]
+        constr = [-1,-1,Cr,1]; % [Ct=1,Cc=1,{Cq=1},{Cr=r},Cs=1]
         
         if (num_modes(1,1) > 2)
             num_modes = 2; % for CTP, only two modes are considered
@@ -284,7 +274,7 @@ switch sim_type
         
         PDM = [DSM,TD,CD,RD];
         
-        constr = [999,999,Cr,1]; % [Ct=1,Cc=1,{Cq=1},{Cr=r},Cs=1]
+        constr = [-1,-1,Cr,1]; % [Ct=1,Cc=1,{Cq=1},{Cr=r},Cs=1]
         
     otherwise
         
