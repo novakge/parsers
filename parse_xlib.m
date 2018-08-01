@@ -159,16 +159,18 @@ res_avail = textscan(file_id, repmat('%d', 1, num_r_resources+num_nr_resources+n
 res_avail = cell2mat(res_avail); % convert to numeric values
 
 
-mode_count = 0;
-mode_count_row = 0;
-mode_count_col = 0;
-TD = 0; % preallocate where possible
-RD = 0; % preallocate where possible
-
 % warning: deviation from original data: remove nonrenewable and doubly constrained resource types temporarily: not supported
 % to use all supported resource types, use row below and remove comment
 num_nr_resources = 0; % TODO
 num_dc_resources = 0; % TODO
+
+mode_count = 0;
+mode_count_row = 0;
+mode_count_col = 0;
+TD = zeros(num_activities, num_modes(1,1)); % pre-allocate time demand matrix
+RD = zeros(num_activities, (num_r_resources+num_nr_resources+num_dc_resources) * num_modes(1,1)); % preallocate where possible
+
+
 
 % create all necessary matrices, start with RD
 for i=1:num_activities % loop through rows (activities)
@@ -211,7 +213,7 @@ CD = zeros(num_activities,1);
 constr = 0; % initialize constraint matrix constr = [Ct=1,Cc=1,{Cq=1},{Cr=r},Cs=1]
 
 % get resource constraints
-Cr = 0; % initialize resource constraint with zero (valid) value, later will be a row vector containing renewable resource(s) availability
+Cr = zeros(1,num_r_resources); % initialize resource constraint with zero (valid) value, later will be a row vector containing renewable resource(s) availability
 if (num_r_resources > 0) % when there are renewable resources at all
     for i=1:num_r_resources
         Cr(1,i) = res_avail(1,i);
