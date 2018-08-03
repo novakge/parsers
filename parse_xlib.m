@@ -6,7 +6,7 @@
 % example: PDM = parse_xlib('test_data/J100108_5.mm', 2) where 1=NTP, 2=CTP, 3=DTP simulation type, 0 = debug (DSM only)
 % output: PDM file containing PDM = [DSM,TD,CD,{QD,RD}], format depending on the selected simulation type (trade-off problem)
 
-function [PDM, constr, num_r_resources, num_modes] = parse_xlib(file_name, sim_type)
+function [PDM, constr, num_r_resources, num_modes, num_activities, sim_type] = parse_xlib(file_name, sim_type)
 
 file_id = fopen(file_name,'r');
 
@@ -236,7 +236,9 @@ switch sim_type
         RD = RD(:,1:num_r_resources + num_nr_resources + num_dc_resources); % deviation from original dataset's structure: for this simulation, only renewable resources are supported
         
         PDM = [DSM,TD,CD,RD];
-
+        
+        num_modes = 1; % for NTP we have only one mode
+        
         constr = [-1,-1,Cr,1]; % [Ct=1,Cc=1,{Cq=1},{Cr=r},Cs=1]
         
     case 2 % CTP

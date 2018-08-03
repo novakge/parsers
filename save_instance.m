@@ -25,8 +25,8 @@ for i=1:size(files,1) % iterate through all files in given directory
        
     [~,filename,~] = fileparts(fullfile(files(i,1).folder,files(i,1).name)); % get filename without extension
     
-    [PDM, constr, num_r_resources, num_modes] = parse_xlib(fullfile(files(i,1).folder,files(i,1).name),j); % parse all files for all simulation types
-    save(strcat(fullfile(files(i,1).folder,out_dir,filename),'_',TP(1,j)),'PDM','constr','num_r_resources','num_modes'); % save each variable "PDM" to the <folder name>/output folder
+    [PDM, constr, num_r_resources, num_modes, num_activities, sim_type] = parse_xlib(fullfile(files(i,1).folder,files(i,1).name),j); % parse all files for all simulation types
+    save(strcat(fullfile(files(i,1).folder,out_dir,filename),'_',TP(1,j)),'PDM','constr','num_r_resources','num_modes','num_activities','sim_type'); % save each variable "PDM" to the <folder name>/output folder
     
     if (j == 1) % save DSM only once per file
         DSM = parse_xlib(fullfile(files(i,1).folder,files(i,1).name),0); % parse only DSM
