@@ -2,7 +2,7 @@
 % Project data: http://www.projectmanagement.ugent.be/?q=research/data/realdata
 % Useful tool for reading xml files: https://www.samltool.com/prettyprint.php
 % Input: file with ProTrack format (*.p2x)
-% Example: >> PDM = parse_protrack('C2011-09 Commercial IT Project.p2x',1)
+% Example: >> PDM = parse_protrack('data/protrack/C2011-09 Commercial IT Project.p2x',1)
 % output: PDM file containing PDM = [DSM,TD,CD,{QD,RD}], format depending on the selected simulation type (trade-off problem)
 % Hint: to easily prepare e.g. test files, Excel<->ProTrack converter can be found at http://ghbonne.github.io/PMConverter
 function [PDM, constr, num_r_resources, num_modes] = parse_protrack(file_name, sim_type)
