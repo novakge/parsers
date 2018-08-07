@@ -3,25 +3,19 @@
 function save_all_instance
 tic;
 fprintf('in progress...');
-save_instance('data/c15')
+save_instance('data/c15', 'xlib')
 fprintf('...');
-save_instance('data/j30')
+save_instance('data/j30', 'xlib')
 fprintf('...');
-save_instance('data/m1')
+save_instance('data/m1', 'xlib')
 fprintf('...');
-save_instance('data/mmlib50')
+save_instance('data/mmlib50', 'xlib')
 fprintf('...');
-save_instance('data/mmlib100')
+save_instance('data/mmlib100', 'xlib')
 fprintf('still working...');
-save_instance('data/mmlibplus')
+save_instance('data/mmlibplus', 'xlib')
 fprintf('done!\n');
 toc;
 
-% any additional dataset goes here
-
-% zip all resulting files in output.zip for easier upload
-fprintf('zipping all files...\n');
-zip('data/output_xlib_all.zip','data');
-fprintf('done!\n');
 
 % any additional dataset goes here
