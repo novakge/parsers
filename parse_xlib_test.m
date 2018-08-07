@@ -80,7 +80,7 @@ end
 
 function test_PSPLIB_OWN_001(testCase)
 PDM = parse_xlib(testCase.TestData.PSPLIB_OWN_001,3);
-actSolution = PDM
+actSolution = PDM;
        %[ DSM ] [  TD    ][CD ] [        RD       ]
 data = [1 1 1 1 1  2   3  0 0 0 1  4  7  2  5  8; % remark: renewable / doubly constrained resources are omitted for our simulation
         0 1 1 1 4  5   6  0 0 0 10 13 16 11 14 17;
