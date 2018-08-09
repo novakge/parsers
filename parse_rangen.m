@@ -66,6 +66,9 @@ if (num_r_resources > 0) % when there are renewable resources at all
     end
 end
 
+% pre-allocate PDM for NTP
+PDM = zeros(num_activities,num_activities+duration_offset+num_r_resources);
+
 % put all relevant matrices together in a PDM depending on simulation type e.g. CTP,DTP,NTP
 switch sim_type
     
@@ -76,25 +79,28 @@ switch sim_type
     case 1 % NTP
         
         PDM = [DSM,TD,CD,RD];
-        constr = [999,999,Cr,1]; % [Ct=1,Cc=1,{Cq=1},{Cr=r},Cs=1]
+        constr = [-1,-1,Cr,1]; % [Ct=1,Cc=1,{Cq=1},{Cr=r},Cs=1]
 
         
     case 2 % CTP
         
-        % number of modes is always one in this dataset, anyway, prepare a proper format
-        TD = [TD, TD]; % duplicate TD to have lower/upper range as n x 2 matrix
-        CD = [CD, CD]; % duplicate CD to have lower/upper range as n x 2 matrix
-        RD = repelem(RD,1,2); % duplicate each column / resource demand to have lower/upper range as n x 2r matrix
-        
-        PDM = [DSM,TD,CD,RD];
-        
-        constr = [999,999,Cr,1]; % [Ct=1,Cc=1,{Cq=1},{Cr=r},Cs=1]
+          % number of modes is always one in this dataset, anyway, prepare a valid format
+          TD = [TD, TD]; % duplicate TD to have lower/upper range as n x 2 matrix
+          CD = [CD, CD]; % duplicate CD to have lower/upper range as n x 2 matrix
+          RD = repelem(RD,1,2); % duplicate each column / resource demand to have lower/upper range as n x 2r matrix
+          PDM = [DSM,TD,CD,RD];
+          constr =  [-1,-1,Cr,1]; % [Ct=1,Cc=1,{Cq=1},{Cr=r},Cs=1]
+
+          sim_type = -1; % indicate that this type is not supported for rangen
         
     case 3 % DTP
         
+        % number of modes is always one in this dataset, anyway, prepare a valid format
         PDM = [DSM,TD,CD,RD]; % number of modes is always one in this dataset, so leave it as it is
         
-        constr = [999,999,Cr,1]; % [Ct=1,Cc=1,{Cq=1},{Cr=r},Cs=1]
+        constr = [-1,-1,Cr,1]; % [Ct=1,Cc=1,{Cq=1},{Cr=r},Cs=1]
+        
+        sim_type = -1; % indicate that this type is not supported for rangen
         
     otherwise
         fprintf('Not a valid TP: only 1=NTP, 2=CTP, 3=DTP,  simulation types are supported!\n');

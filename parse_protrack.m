@@ -197,21 +197,26 @@ switch sim_type
     case 1 % NTP
         
         PDM = [DSM,TD,CD,RD]; % QD is not available in original data
-        constr = [999,999,Cr,1]; % there is no real constraint here, maybe some theoretical one [Ct=1,Cc=1,{Cq=1},{Cr=r},Cs=1]
+        constr = [-1,-1,Cr,1]; % there is no real constraint here, maybe some theoretical one [Ct=1,Cc=1,{Cq=1},{Cr=r},Cs=1]
         
     case 2 % CTP
         
+        % number of modes is always one in this dataset, anyway, prepare a valid format
         TD = [TD, TD]; % duplicate TD to have lower/upper range as n x 2 matrix
         CD = [CD, CD]; % duplicate CD to have lower/upper range as n x 2 matrix
         RD = repelem(RD,1,2); % duplicate each column / resource demand to have lower/upper range as n x 2r matrix
         
         PDM = [DSM,TD,CD,RD];
-        constr = [999,999,Cr,1]; % there is no real constraint, maybe some theoretical one goes here [Ct=1,Cc=1,{Cq=1},{Cr=r},Cs=1]
+        constr = [-1,-1,Cr,1]; % there is no real constraint, maybe some theoretical one goes here [Ct=1,Cc=1,{Cq=1},{Cr=r},Cs=1]
+        
+        sim_type = -1; % skip this trade-off problem
         
     case 3 % DTP
         
         PDM = [DSM,TD,CD,RD]; % number of modes is always "1" in this dataset, so leave it as it is
-        constr = [999,999,Cr,1]; % there is no real constraint, maybe some theoretical one goes here [Ct=1,Cc=1,{Cq=1},{Cr=r},Cs=1]
+        constr = [-1,-1,Cr,1]; % there is no real constraint, maybe some theoretical one goes here [Ct=1,Cc=1,{Cq=1},{Cr=r},Cs=1]
+        
+        sim_type = -1; % skip this trade-off problem
         
     otherwise
         fprintf('Not a valid TP: only 1=NTP, 2=CTP, 3=DTP,  simulation types are supported!\n');
