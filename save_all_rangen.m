@@ -1,6 +1,6 @@
-% batch processing of predefined *.mm files to (parsed) *.mat files as an input for simulation
-% example: save_all_instance
-function save_all_instance
+% batch processing of predefined *.rcp files to (parsed) *.mat files as an input for simulation
+% example: save_all_rangen
+function save_all_rangen
 tic;
 fprintf('in progress..');
 save_instance('data/patterson','rangen')
