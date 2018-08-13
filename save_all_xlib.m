@@ -3,13 +3,13 @@
 function save_all_instance
 tic;
 fprintf('in progress...');
-save_instance('data/c15', 'xlib')
+save_instance('data/c15mm', 'xlib')
 fprintf('...');
 save_instance('data/j20mm', 'xlib')
 fprintf('...');
 save_instance('data/j30mm', 'xlib')
 fprintf('...');
-save_instance('data/m1', 'xlib')
+save_instance('data/m1mm', 'xlib')
 fprintf('...');
 save_instance('data/m2mm', 'xlib')
 fprintf('...');
