@@ -1,7 +1,10 @@
 # parsers
 Parser for multiple datasets like RanGen, ProTrack, PSPLIB and MMLIB
 
-1. Goal/description
+0. Table of Contents
+
+
+1. About/Goal/description
  Parse standard project datasets with different formats in Matlab format as an input for simulations
 
 
@@ -11,6 +14,16 @@ Parser for multiple datasets like RanGen, ProTrack, PSPLIB and MMLIB
 
 3. Installation instructions 
  Copy the files to Matlab working directory
+ 
+3.1 Folders
+├                         <- Root directory for all matlab source files
+├── data                  <- Containing several standard datasets
+│   ├── e.g. j30          <- Folder of example dataset
+│   ├── e.g. mmlib50      <- Folder of example dataset
+├── doc                   <- Contains additional documentation, results, info etc.
+├── test_data             <- Directory for test related datasets, mat files etc.
+├── tool                  <- Contains additional tools, converters, generators etc.
+
 
 4. Features and examples
 4.1 Parse RanGen 1-2 (Patterson format) files in Matlab
@@ -52,7 +65,6 @@ examples: >> results = run(parse_xlib_test) or equivalent >> runtests('parse_xli
 
 Note: ../folder/test_data contains the necessary input files for the provided unit tests.
 
-
 6. Other documents and files
 - All supported datasets are in the main folder of each parser package. For example ../RangenX_parser/RG30 contains the RG30 dataset and it's files in the actual format.
 - An overview excel is provided in ../doc/datasets_info.xlsx folder summarizing the available (supported/not yet supported) datasets and their formats etc.
@@ -80,29 +92,8 @@ Note: ../folder/test_data contains the necessary input files for the provided un
 9. Authors
 Gergely Novák, 2018
 
+10. Contribution
+Please contact before making a pull request.
 
-10. License
-
-MIT License
-
-Copyright (c) 2018 Gergely Novák
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
-11. Acknowledgements
+11. License
+This project is licensed under the terms of the MIT license.
