@@ -16,6 +16,7 @@ Parser for multiple datasets like RanGen, ProTrack, PSPLIB and MMLIB
  Copy the files to Matlab working directory
  
 3.1 Folders
+```
 ├                         <- Root directory for all matlab source files
 ├── data                  <- Containing several standard datasets
 │   ├── e.g. j30          <- Folder of example dataset
@@ -23,7 +24,7 @@ Parser for multiple datasets like RanGen, ProTrack, PSPLIB and MMLIB
 ├── doc                   <- Contains additional documentation, results, info etc.
 ├── test_data             <- Directory for test related datasets, mat files etc.
 ├── tool                  <- Contains additional tools, converters, generators etc.
-
+```
 
 4. Features and examples
 4.1 Parse RanGen 1-2 (Patterson format) files in Matlab
