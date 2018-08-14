@@ -1,0 +1,108 @@
+# parsers
+Parser for multiple datasets like RanGen, ProTrack, PSPLIB and MMLIB
+
+1. Goal/description
+ Parse standard project datasets with different formats in Matlab format as an input for simulations
+
+
+2. Prerequisites
+ Mathworks MATLAB R2017a
+
+
+3. Installation instructions 
+ Copy the files to Matlab working directory
+
+4. Features and examples
+4.1 Parse RanGen 1-2 (Patterson format) files in Matlab
+    input: file with patterson format (e.g. *.rcp, *.prb)
+    example: >> PDM = parse_rangen('data/Patterson/pat80.rcp', 1) where 1=NTP trade-off problem type (single mode)
+    output: PDM file containing PDM = [DSM,TD,CD,{QD,RD}], format depending on the selected simulation type (trade-off problem)
+
+4.2 Parse ProTrack files in Matlab
+    input: file with protrack format (e.g. *.p2x) in xml
+    example: >> PDM = parse_protrack('data/protrack/C2011-09 Commercial IT Project.p2x',1) where 1=NTP trade-off problem type (single mode)
+    output: PDM file containing PDM = [DSM,TD,CD,{QD,RD}], format depending on the selected simulation type (trade-off problem)
+
+4.3 Parse PSPLIB or MMLIB files in Matlab
+    input: file with PSPLIB/MMLIB library format (e.g. *.mm)
+    example: >> PDM = parse_xlib('data/mmlib100',1) where 1=NTP, 2=CTP, 3=DTP simulation trade-off problem type (multi-mode)
+    output: PDM file containing PDM = [DSM,TD,CD,{QD,RD}], format depending on the selected simulation type (trade-off problem)
+    
+4.4 Export parsed data to *.mat files (batch process all files in a directory)
+    It is possible to export the parsed data to *.mat files, including the desired runtime/workspace variables for all type of trade-off problems (NTP,CTP,DTP) automatically or manually.
+    Please note, the "RG300" dataset is corrected, as new line characters were present in longer lines and now stored in "RG300_corr" folder. Verification of this dataset is still in progress.
+    input: folder containing datasets for parsing and exporting to *.mat
+    example: >> save_rangen('data/Patterson')
+    example output: ../data/Patterson_output containing all the converted matlab binaries *.mat for all trade-off problem type with naming like *_NTP.mat, *_DTP.mat *_CTP.mat and *_DSM.mat.
+
+4.5 Export all datasets
+    It is also possible to batch process all datasets with the available parsers.
+    input: existing data folder
+    example: >> save_all
+    example output: ../data/<dataset_folder>_output containing all the converted matlab binaries *.mat for all supported trade-off problem types for the specific dataset with naming like *_NTP.mat, *_DTP.mat *_CTP.mat *_DSM.mat.
+
+
+5. Tests
+Each folder contains the relevant unit tests for the parsers.
+To run the corresponding unit tests:
+
+examples: >> results = run(parse_rangen_test) or equivalent >> runtests('parse_rangen_test')
+examples: >> results = run(parse_protrack_test) or equivalent >> runtests('parse_protrack_test')
+examples: >> results = run(parse_xlib_test) or equivalent >> runtests('parse_xlib_test')
+
+Note: ../folder/test_data contains the necessary input files for the provided unit tests.
+
+
+6. Other documents and files
+- All supported datasets are in the main folder of each parser package. For example ../RangenX_parser/RG30 contains the RG30 dataset and it's files in the actual format.
+- An overview excel is provided in ../doc/datasets_info.xlsx folder summarizing the available (supported/not yet supported) datasets and their formats etc.
+- Mario Vanhoucke's excel is provided in ../doc/Datasets with Parameters and BKS (Version 3 - 2017).xlsx for all the datasets and their indicator scores/values. This is a good source for cross-validating calculations with the parser e.g. I1-I6 etc.
+- ../parsers/tools/rangen/Rangen.exe is an application for generating new project data in patterson format (Vanhoucke et al.). Also can be used to generate new data with desired indicator values and then cross-check with the parser.
+- ../parsers/tools/PMConverte/PMConverter.exe is a useful application to convert real-life project data excel files (can also be an own project file based on template) and protrack format *.p2x, vice versa. This can also be used to test the parser on artificial / modified projects or used for debugging.
+
+
+7. Changelog (readme.txt)
+- 1.0 initial revision: documenting rangenx_v2 and protrack parsers, NovakG, 18.05.2018.
+- 1.1 update for all-in-one parser like folder names, add psplib/mmlib support etc., NovakG, 14.08.2018.
+
+
+8. Links, useful docs
+
+- Patterson format description and examples: http://www.p2engine.com/p2reader/patterson_format
+- Already available results for comparison (Vanhoucke et al.): http://www.projectmanagement.ugent.be/sites/default/files/files/datasets/AboutData.zip
+- Summary excel including indicators (Vanhoucke et al.): http://www.projectmanagement.ugent.be/sites/default/files/files/datasets/Datasets%20with%20Parameters%20and%20BKS.xlsx
+- Useful tool for reading xml files in human readable format: https://www.samltool.com/prettyprint.php
+- To easily prepare e.g. test files, Excel<->ProTrack converter can be found at http://ghbonne.github.io/PMConverter
+- Unit tests in Matlab howto and examples: https://www.mathworks.com/help/matlab/matlab-unit-test-framework.html
+- Real-life project data (Vanhoucke et al.) http://www.projectmanagement.ugent.be/?q=research/data/realdata
+
+
+9. Authors
+Gergely Novák, 2018
+
+
+10. License
+
+MIT License
+
+Copyright (c) 2018 Gergely Novák
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+11. Acknowledgements
