@@ -57,10 +57,10 @@ for i=1:size(files,1) % iterate through all files in given directory
        
     [~,filename,~] = fileparts(fullfile(files(i,1).folder,files(i,1).name)); % get filename without extension
     
-    [PDM, constr, num_r_resources, num_modes, num_activities, sim_type] = parser(fullfile(files(i,1).folder,files(i,1).name),j); % parse all files for all simulation types
+    [PDM, constr, num_r_resources, num_nr_resources, num_modes, num_activities, sim_type] = parser(fullfile(files(i,1).folder,files(i,1).name),j); % parse all files for all simulation types
     
     if sim_type > 0 % if the given simulation type is supported for the dataset
-        save(strcat(out_dir,filename,'_',TP(1,j)),'PDM','constr','num_r_resources','num_modes','num_activities','sim_type'); % save each variable "PDM" to the <folder name>/output folder
+        save(strcat(out_dir,filename,'_',TP(1,j)),'PDM','constr','num_r_resources', 'num_nr_resources', 'num_modes','num_activities','sim_type'); % save each variable "PDM" to the <folder name>/output folder
     else
         % skip the given trade-off for this instance (not supported)
     end
