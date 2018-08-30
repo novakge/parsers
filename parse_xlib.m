@@ -6,7 +6,7 @@
 % example: PDM = parse_xlib('test_data/J100108_5.mm', 2) where 1=NTP, 2=CTP, 3=DTP simulation type, 0 = debug (DSM only)
 % output: PDM file containing PDM = [DSM,TD,CD,{QD,RD}], format depending on the selected simulation type (trade-off problem)
 
-function [PDM, constr, num_r_resources, num_modes, num_activities, sim_type] = parse_xlib(file_name, sim_type)
+function [PDM, constr, num_r_resources, num_nr_resources, num_modes, num_activities, sim_type] = parse_xlib(file_name, sim_type)
 
 file_id = fopen(file_name,'r');
 
@@ -208,14 +208,14 @@ end
 
 
 % create initially an n x 1 CD matrix for cost demands; in case no cost data available, CD = "1" for all activities
-CD = zeros(num_activities,1);
+CD = zeros(num_activities,num_modes(1,1)); % pre-allocate cost matrix nxw
 
 constr = 0; % initialize constraint matrix constr = [Ct=1,Cc=1,{Cq=1},{Cr=r},Cs=1]
 
 % get resource constraints
-Cr = zeros(1,num_r_resources); % initialize resource constraint with zero (valid) value, later will be a row vector containing renewable resource(s) availability
-if (num_r_resources > 0) % when there are renewable resources at all
-    for i=1:num_r_resources
+Cr = zeros(1,num_r_resources+num_nr_resources+num_dc_resources); % initialize resource constraint with zero (valid) value, later will be a row vector containing renewable resource(s) availability
+if (num_r_resources+num_nr_resources+num_dc_resources > 0) % when there are renewable resources at all
+    for i=1:num_r_resources+num_nr_resources+num_dc_resources
         Cr(1,i) = res_avail(1,i);
     end
 end
@@ -231,27 +231,28 @@ switch sim_type
     case 1 % NTP
         
         TD = TD(:,1); % for NTP, only one mode is considered with one duration column
+        CD = CD(:,1); % for NTP, only one mode is considered with one cost column
         
         % for NTP, only one mode is considered with the demand of first modes for all resources
-        RD = RD(:,1:num_r_resources + num_nr_resources + num_dc_resources); % deviation from original dataset's structure: for this simulation, only renewable resources are supported
+        RD = res_mode_dur_req(1:num_modes(1,1):end,4:3+num_r_resources + num_nr_resources + num_dc_resources); % see resource type flag for including/excluding non-renewable and doubly constrained type
         
         PDM = [DSM,TD,CD,RD];
         
         num_modes = 1; % for NTP we have only one mode
         
-        constr = [-1,-1,Cr,1]; % [Ct=1,Cc=1,{Cq=1},{Cr=r},Cs=1]
+        constr = [-1,-1,Cr,-1]; % [Ct=1,Cc=1,{Cq=1},{Cr=r},Cs=1]
         
     case 2 % CTP
         
         % resource lower and upper values are from the first and last mode (maximum time, minimum resource)
-        CD = [CD, CD]; % duplicate a "dummy" CD to have lower/upper range cost as n x 2 matrix, as it is not part of the original dataset/instance
+        CD = [CD(:,1) CD(:,max(num_modes))]; % duplicate a "dummy" CD to have lower/upper range cost as n x 2 matrix, as it is not part of the original dataset/instance
         TD = [TD(:,1) TD(:,max(num_modes))]; % adapt TD to have lower/upper range as n x 2 matrix given by first mode and last mode's value
         
         RD_2 = zeros(num_activities,(num_r_resources+num_nr_resources+num_dc_resources)*2); % pre-allocate for each resources demands, upper/lower range determined by the first and last (wth) mode
         
         I = 1; % always start with 1st resource 1st mode
         % create list of indices for resource demands first and last modes for all resource types except NR and DC
-        for i = 1:num_r_resources*num_modes(1,1)
+        for i = 1:(num_r_resources+num_nr_resources+num_dc_resources)*num_modes(1,1)
             if (mod(i,num_modes(1,1)) < 2) && (i > 1) % select every first and last mode of each resource, e.g. with 3 resources and w=4 modes, 1,,,,4;5,,,,9,10,,,,14
                 I = [I, i];
             end
@@ -288,6 +289,7 @@ end
 
 % TODO use flags to enable/disable nonrenewable and doubly constrained, and put accordingly resources in RD and determine constraints vector also
 % TODO determine resource and time constraint based on RD TD and take multiple modes into account
+% TODO use duration for PSPLIB only (if line_project_info present, then use as time constraint, otherwise use -1 for DTP,NTP,CTP types
 
 num_modes = num_modes(1,1); % finally, truncate number of modes to a single value for function output
 
