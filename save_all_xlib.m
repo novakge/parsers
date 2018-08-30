@@ -13,6 +13,8 @@ save_instance('data/m1mm', 'xlib')
 fprintf('...');
 save_instance('data/m2mm', 'xlib')
 fprintf('...');
+save_instance('data/n1mm', 'xlib')
+fprintf('...');
 save_instance('data/mmlib50', 'xlib')
 fprintf('...');
 save_instance('data/mmlib100', 'xlib')
