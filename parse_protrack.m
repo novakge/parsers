@@ -5,7 +5,7 @@
 % Example: >> PDM = parse_protrack('data/protrack/C2011-09 Commercial IT Project.p2x',1)
 % output: PDM file containing PDM = [DSM,TD,CD,{QD,RD}], format depending on the selected simulation type (trade-off problem)
 % Hint: to easily prepare e.g. test files, Excel<->ProTrack converter can be found at http://ghbonne.github.io/PMConverter
-function [PDM, constr, num_r_resources, num_modes, num_activities, sim_type] = parse_protrack(file_name, sim_type)
+function [PDM, constr, num_r_resources, num_nr_resources, num_modes, num_activities, sim_type] = parse_protrack(file_name, sim_type)
 
 % read xml as object from file
 xml = xmlread(file_name);
@@ -223,6 +223,7 @@ switch sim_type
         PDM=DSM; % for tests
 end
 
+num_nr_resources = 0; % no non-renewable resources present in this dataset
 % for debugging
 % resource_data;
 % num_modes;
