@@ -12,11 +12,11 @@ end
 
 % setup test cases
 function setup(testCase)
-testCase.TestData.PROGEN_001 = 'test_data/MMRCPSP463.sch';
+testCase.TestData.PROGEN_OWN_001 = 'test_data/MMRCPSP463.sch';
 end
 
-function test_PROGEN_001(testCase)
-[i1,i2,i3,i4,i5,i6] = indicators(parse_progen(testCase.TestData.PROGEN_001,0));
+function test_PROGEN_OWN_001(testCase)
+[i1,i2,i3,i4,i5,i6] = indicators(parse_progen(testCase.TestData.PROGEN_OWN_001,0));
 actSolution = [i1,i2,i3,i4,i5,i6];
 expSolution = [40, 0.0770, 0.593, 0, 0.056, 0.648]; % see also results of "Datasets with Parameters and BKS (BVersion 3 - 2017.xlsx"
 verifyEqual(testCase,actSolution,expSolution,'AbsTol',0.01)
