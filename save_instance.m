@@ -1,9 +1,10 @@
-% batch processing of *.mm / *.p2x / *.rcp files to (parsed) *.mat files as an input for simulation
+% batch processing of *.mm / *.p2x / *.rcp / *.sch files to (parsed) *.mat files as an input for simulation
 % input: <folder name> containing files in the given format and extension
 % output: parsed *.mat file for each input file stored in ../<folder name>/output folder
 % example #1: save_instance('data_folder', 'rangen')
 % example #2: save_instance('data_folder', 'protrack')
 % example #3: save_instance('data_folder', 'xlib')
+% example #3: save_instance('data_folder', 'progen')
 function save_instance(directory, parser_type)
 
 % select the existing parser function and the corresponding file extension
@@ -28,8 +29,14 @@ switch parser_type
             extension_filter = '*.mm'; % select extension
         end
 
+    case 'progen'
+        if exist('parse_progen') % Progen/MAX (~PSPLIB)
+            parser = @parse_progen; % create common function handle
+            extension_filter = '*.sch'; % select extension
+        end
+
     otherwise
-        error('Invalid parser type selected, please choose one of: rangen | protrack | xlib \n');
+        error('Invalid parser type selected, please choose one of: rangen | protrack | xlib | progen \n');
 end
 
 browse_dir = fullfile(directory, extension_filter); % look for all files with the extension in given subfolder
