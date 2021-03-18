@@ -75,7 +75,7 @@ Note: ../test_data contains the necessary input files for the provided unit test
 - ../doc/boctor_format.xlsx contains "reverse engineered" information regarding the format/structure of Boctor dataset (not all details published in original paper)
 
 
-7. Changelog (readme.txt)
+7. Changelog (README.md, this file)
 - 1.0 initial revision: documenting rangenx_v2 and protrack parsers, NovakG, 18.05.2018.
 - 1.1 update for all-in-one parser like folder names, add psplib/mmlib support etc., NovakG, 14.08.2018.
 - 1.2 minor update after adding Boctor dataset
