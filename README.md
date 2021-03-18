@@ -64,19 +64,21 @@ examples: >> results = run(parse_rangen_test) or equivalent >> runtests('parse_r
 examples: >> results = run(parse_protrack_test) or equivalent >> runtests('parse_protrack_test')
 examples: >> results = run(parse_xlib_test) or equivalent >> runtests('parse_xlib_test')
 
-Note: ../folder/test_data contains the necessary input files for the provided unit tests.
+Note: ../test_data contains the necessary input files for the provided unit tests.
 
 6. Other documents and files
-- All supported datasets are in the main folder of each parser package. For example ../RangenX_parser/RG30 contains the RG30 dataset and it's files in the actual format.
+- All supported datasets are in the main folder of each parser package. For example ../data/RG30 contains the RG30 dataset and it's files in the actual format.
 - An overview excel is provided in ../doc/datasets_info.xlsx folder summarizing the available (supported/not yet supported) datasets and their formats etc.
-- Mario Vanhoucke's excel is provided in ../doc/Datasets with Parameters and BKS (Version 3 - 2017).xlsx for all the datasets and their indicator scores/values. This is a good source for cross-validating calculations with the parser e.g. I1-I6 etc.
-- ../parsers/tools/rangen/Rangen.exe is an application for generating new project data in patterson format (Vanhoucke et al.). Also can be used to generate new data with desired indicator values and then cross-check with the parser.
-- ../parsers/tools/PMConverte/PMConverter.exe is a useful application to convert real-life project data excel files (can also be an own project file based on template) and protrack format *.p2x, vice versa. This can also be used to test the parser on artificial / modified projects or used for debugging.
+- Mario Vanhoucke's summary excel is provided in ../doc/Datasets with Parameters and BKS (Version 3 - 2017).xlsx for all the datasets and their indicator scores/values. This is a good source for cross-validating calculations with the parser e.g. I1-I6 etc.
+- ../tools/rangen/Rangen.exe is an application for generating new project data in patterson format (Vanhoucke et al.). Also can be used to generate new data with desired indicator values and then cross-check with the parser.
+- ../tools/PMConverte/PMConverter.exe is a useful application to convert real-life project data excel files (can also be an own project file based on template) and protrack format *.p2x, vice versa. This can also be used to test the parser on artificial / modified projects or used for debugging.
+- ../doc/boctor_format.xlsx contains "reverse engineered" information regarding the format/structure of Boctor dataset (not all details published in original paper)
 
 
 7. Changelog (readme.txt)
 - 1.0 initial revision: documenting rangenx_v2 and protrack parsers, NovakG, 18.05.2018.
 - 1.1 update for all-in-one parser like folder names, add psplib/mmlib support etc., NovakG, 14.08.2018.
+- 1.2 minor update after adding Boctor dataset
 
 
 8. Links, useful docs
