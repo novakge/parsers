@@ -29,7 +29,7 @@ Parser for multiple datasets like MMLIB (RanGen1/2), Real-life (ProTrack), PSPLI
 4. Features and examples
 
 4.1 Parse RanGen 1-2 (Patterson format) files in Matlab
-    input: file with patterson format (e.g. *.rcp, *.prb)
+    input: file with patterson format (e.g. *.rcp)
     example: >> PDM = parse_rangen('data/Patterson/pat80.rcp', 1) where 1=NTP trade-off problem type (single mode)
     output: PDM file containing PDM = [DSM,TD,CD,{QD,RD}], format depending on the selected simulation type (trade-off problem)
 
