@@ -42,7 +42,12 @@ Parser for multiple datasets like MMLIB (RanGen1/2), Real-life (ProTrack), PSPLI
     example: >> PDM = parse_xlib('data/mmlib100',1) where 1=NTP, 2=CTP, 3=DTP simulation trade-off problem type (multi-mode)
     output: PDM file containing PDM = [DSM,TD,CD,{QD,RD}], format depending on the selected simulation type (trade-off problem)
     
-4.4 Export parsed data to *.mat files (batch process all files in a directory)
+4.4 Parse Boctor files in Matlab
+    input: file with Boctor library format (e.g. *.prb)
+    example: >> PDM = parse_boctor('data/boctor100',1) where 1=NTP, 2=CTP, 3=DTP simulation trade-off problem type (multi-mode)
+    output: PDM file containing PDM = [DSM,TD,CD,{QD,RD}], format depending on the selected simulation type (trade-off problem)
+    
+4.5 Export parsed data to *.mat files (batch process all files in a directory)
     It is possible to export the parsed data to *.mat files, including the desired runtime/workspace variables for all type of trade-off problems (NTP,CTP,DTP) automatically or manually.
     Please note, the "RG300" dataset is corrected, as new line characters were present in longer lines and now stored in "RG300_corr" folder. Verification of this dataset is still in progress.
     input: folder containing datasets for parsing and exporting to *.mat
