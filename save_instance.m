@@ -5,6 +5,8 @@
 % example #2: save_instance('data_folder', 'protrack')
 % example #3: save_instance('data_folder', 'xlib')
 % example #3: save_instance('data_folder', 'progen')
+% example #4: save_instance('data_folder', 'boctor')
+
 function save_instance(directory, parser_type)
 
 % select the existing parser function and the corresponding file extension
@@ -33,6 +35,12 @@ switch parser_type
         if exist('parse_progen') % Progen/MAX (~PSPLIB)
             parser = @parse_progen; % create common function handle
             extension_filter = '*.sch'; % select extension
+        end
+
+    case 'boctor'
+        if exist('parse_progen') % Boctor
+            parser = @parse_boctor; % create common function handle
+            extension_filter = '*.prb'; % select extension
         end
 
     otherwise

@@ -9,6 +9,8 @@ fprintf('saving protrack dataset...');
 save_all_protrack
 fprintf('saving psplib/mmlib datasets...');
 save_all_xlib
+fprintf('saving boctor datasets...');
+save_all_boctor
 fprintf('all done!\n');
 toc;
 
