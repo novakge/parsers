@@ -27,6 +27,7 @@ Parser for multiple datasets like MMLIB (RanGen1/2), Real-life (ProTrack), PSPLI
 ```
 
 4. Features and examples
+
 4.1 Parse RanGen 1-2 (Patterson format) files in Matlab
     input: file with patterson format (e.g. *.rcp, *.prb)
     example: >> PDM = parse_rangen('data/Patterson/pat80.rcp', 1) where 1=NTP trade-off problem type (single mode)
@@ -62,6 +63,7 @@ Parser for multiple datasets like MMLIB (RanGen1/2), Real-life (ProTrack), PSPLI
 
 
 5. Tests
+
 Each folder contains the relevant unit tests for the parsers.
 To run the corresponding unit tests:
 
@@ -72,6 +74,7 @@ examples: >> results = run(parse_xlib_test) or equivalent >> runtests('parse_xli
 Note: ../test_data contains the necessary input files for the provided unit tests.
 
 6. Other documents and files
+
 - All supported datasets are in the main folder of each parser package. For example ../data/RG30 contains the RG30 dataset and it's files in the actual format.
 - An overview excel is provided in ../doc/datasets_info.xlsx folder summarizing the available (supported/not yet supported) datasets and their formats etc.
 - Mario Vanhoucke's summary excel is provided in ../doc/Datasets with Parameters and BKS (Version 3 - 2017).xlsx for all the datasets and their indicator scores/values. This is a good source for cross-validating calculations with the parser e.g. I1-I6 etc.
@@ -81,6 +84,7 @@ Note: ../test_data contains the necessary input files for the provided unit test
 
 
 7. Changelog (README.md, this file)
+
 - 1.0 initial revision: documenting rangenx_v2 and protrack parsers, NovakG, 18.05.2018.
 - 1.1 update for all-in-one parser like folder names, add psplib/mmlib support etc., NovakG, 14.08.2018.
 - 1.2 minor update after adding Boctor dataset
@@ -98,10 +102,13 @@ Note: ../test_data contains the necessary input files for the provided unit test
 
 
 9. Authors
+
 Gergely Novák, 2018
 
 10. Contribution
+
 Please contact before making a pull request.
 
 11. License
+
 This project is licensed under the terms of the MIT license.
