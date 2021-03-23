@@ -1,6 +1,6 @@
-% batch processing of predefined *.mm files to (parsed) *.mat files as an input for simulation
-% example: save_all_instance
-function save_all_instance
+% batch save all libraries to (parsed) *.mat files
+% example: save_all
+function save_all
 tic;
 fprintf('in progress...');
 fprintf('saving rangen dataset...');

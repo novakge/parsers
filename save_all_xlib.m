@@ -1,11 +1,13 @@
-% batch processing of predefined *.mm files to (parsed) *.mat files as an input for simulation
+% batch processing of predefined *.sm or *.mm files to (parsed) *.mat files as an input for simulation
 % example: save_all_instance
-function save_all_instance
+function save_all_xlib
 tic;
 fprintf('in progress...');
 save_instance('data/c15mm', 'xlib')
 fprintf('...');
 save_instance('data/j20mm', 'xlib')
+fprintf('...');
+save_instance('data/j30sm', 'xlib')
 fprintf('...');
 save_instance('data/j30mm', 'xlib')
 fprintf('...');

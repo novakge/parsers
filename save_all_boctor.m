@@ -1,7 +1,7 @@
-% batch processing of predefined *.mm files to (parsed) *.mat files as an input for simulation
-% example: save_all_instance
+% batch processing of predefined *.prb files to (parsed) *.mat files as an input for simulation
+% example: save_all_boctor
 
-function save_all_instance
+function save_all_boctor
 tic;
 fprintf('in progress...');
 save_instance('data/boctor50', 'boctor')

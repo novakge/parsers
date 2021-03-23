@@ -6,7 +6,7 @@
 % example: PDM = parse_rangen('test_data/pat80.rcp', 2) where 1=NTP, 2=CTP, 3=DTP simulation type
 % output: PDM file containing PDM = [DSM,TD,CD,{QD,RD}], format depending on the selected simulation type (trade-off problem)
 
-function [PDM, constr, num_r_resources, num_modes, num_activities, sim_type] = parse_rangen(file_name, sim_type)
+function [PDM, constr, num_r_resources, num_nr_resources, num_modes, num_activities, sim_type] = parse_rangen(file_name, sim_type)
 
 % define constants
 num_dummy_nodes = 2;
@@ -19,6 +19,7 @@ rangen_data = dlmread(file_name);
 
 num_activities = rangen_data(1) - num_dummy_nodes; % store number of activities and exclude dummy activities (start/end node)
 num_r_resources = rangen_data(1,2); % store number of renewable resources
+num_nr_resources = 0; % no non-renewable resources present in this dataset
 res_avail = rangen_data(2,1:num_r_resources); % store resources' availabilities
 
 rangen_data = rangen_data(4:end - dummy_node_offset,:); % remove header lines and dummy activities (start/end node) for better indices

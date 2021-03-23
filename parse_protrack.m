@@ -22,6 +22,7 @@ num_activities = act_nodes.getLength;
 % get number of resources = r
 res = xml.getElementsByTagName('Resource');
 num_r_resources = res.getLength;
+num_nr_resources = 0; % no non-renewable resources present in this dataset
 
 % get number of resource assignments
 res_assign = xml.getElementsByTagName('ResourceAssignment');
@@ -194,6 +195,11 @@ end
 
 % put all relevant matrices together in a PDM depending on simulation type e.g. CTP,DTP,NTP
 switch sim_type
+    
+    case 0 % debug, DSM only
+
+        PDM=DSM; % for tests
+
     case 1 % NTP
         
         PDM = [DSM,TD,CD,RD]; % QD is not available in original data
@@ -223,7 +229,6 @@ switch sim_type
         PDM=DSM; % for tests
 end
 
-num_nr_resources = 0; % no non-renewable resources present in this dataset
 % for debugging
 % resource_data;
 % num_modes;
