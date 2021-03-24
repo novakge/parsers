@@ -1,5 +1,5 @@
 # parsers
-Parser for multiple datasets like MMLIB (RanGen1/2), Real-life (ProTrack), PSPLIB (ProGen)
+Parser for multiple datasets like PSPLIB (ProGen), MMLIB (RanGen1/2), Real-life (ProTrack), Boctor, Patterson [...]
 
 0. Table of Contents
 
