@@ -79,7 +79,7 @@ Note: ../test_data contains the necessary input files for the provided unit test
 - An overview excel is provided in ../doc/datasets_info.xlsx folder summarizing the available (supported/not yet supported) datasets and their formats etc.
 - Mario Vanhoucke's summary excel is provided in ../doc/Datasets with Parameters and BKS (Version 3 - 2017).xlsx for all the datasets and their indicator scores/values. This is a good source for cross-validating calculations with the parser e.g. I1-I6 etc.
 - ../tools/rangen/Rangen.exe is an application for generating new project data in patterson format (Vanhoucke et al.). Also can be used to generate new data with desired indicator values and then cross-check with the parser.
-- ../tools/PMConverte/PMConverter.exe is a useful application to convert real-life project data excel files (can also be an own project file based on template) and protrack format *.p2x, vice versa. This can also be used to test the parser on artificial / modified projects or used for debugging.
+- ../tools/PMConverter/PMConverter.exe is a useful application to convert real-life project data excel files (can also be an own project file based on template) and protrack format *.p2x, vice versa. This can also be used to test the parser on artificial / modified projects or used for debugging.
 - ../doc/boctor_format.xlsx contains "reverse engineered" information regarding the format/structure of Boctor dataset (not all details published in original paper)
 
 
@@ -87,7 +87,7 @@ Note: ../test_data contains the necessary input files for the provided unit test
 
 - 1.0 initial revision: documenting rangenx_v2 and protrack parsers, NovakG, 18.05.2018.
 - 1.1 update for all-in-one parser like folder names, add psplib/mmlib support etc., NovakG, 14.08.2018.
-- 1.2 minor update after adding Boctor dataset
+- 1.2 minor update after adding Boctor dataset, NovakG, 18.03.2021.
 
 
 8. Links, useful docs
@@ -103,7 +103,7 @@ Note: ../test_data contains the necessary input files for the provided unit test
 
 9. Authors
 
-Gergely Novák, 2018
+Gergely Novák, 2018-2021
 
 10. Contribution
 
