@@ -17,12 +17,51 @@ successors_offset = 1;
 % read raw input data in matrix
 rangen_data = dlmread(file_name);
 
+% get info from header
 num_activities = rangen_data(1) - num_dummy_nodes; % store number of activities and exclude dummy activities (start/end node)
 num_r_resources = rangen_data(1,2); % store number of renewable resources
 num_nr_resources = 0; % no non-renewable resources present in this dataset
 res_avail = rangen_data(2,1:num_r_resources); % store resources' availabilities
 
-rangen_data = rangen_data(4:end - dummy_node_offset,:); % remove header lines and dummy activities (start/end node) for better indices
+% rg300 related offsets
+unwrapped_successors = 20; % maximal number of successors listed at a line
+successors_offset = duration_offset + num_r_resources + successors_offset;
+wrap_flag = 1;
+
+% handle exceptions where 20+ successors present, but are not wrapped in newline
+if size(rangen_data,2) > (successors_offset + unwrapped_successors)
+    wrap_flag = 0; % successors are not wrapped into newline(s), e.g. patterson #141
+end
+        
+row_orig = 1; % index used for input data
+row_new = 1; % index used for output data
+pos_col = unwrapped_successors + successors_offset; % merging position of successors
+
+if (wrap_flag == 1) % wrap limit not reached or wrapped lines present
+    
+    rangen_data = rangen_data(3:end - dummy_node_offset,:); % remove header lines and dummy activities (start/end node)
+    
+    % conversion needed due to newline characters that are wrapping long lines in RG300 data
+    while row_orig <= size(rangen_data,1) % go through rows of original data
+        num_successors = rangen_data(row_orig,successors_offset); % check the number of successors for the given activity
+        temp_data(row_new,1:size(rangen_data,2)) = rangen_data(row_orig,:); % copy the the first actual row for the given activity
+        num_lines = ceil(num_successors/(unwrapped_successors)) - 1; % check if and how many newlines we need to consider for successors e.g. 72/20=3.6 -> 4-1 extra lines, 40/20=2 -> 2-1 extra line
+        
+        for i=1:num_lines % merge extra lines to the end of the activity's current line
+            temp_data(row_new,pos_col+1:pos_col+unwrapped_successors) = rangen_data(row_orig+i,1:unwrapped_successors); % merge to the end of current activity's (row) successor list
+            pos_col = pos_col + unwrapped_successors; % prepare position for the next line
+        end
+        
+        row_new = row_new + 1; % increment row index of output
+        pos_col = unwrapped_successors + successors_offset; % reset position back to the end of next activity's row
+        row_orig = row_orig+num_lines + 1; % next row
+    end
+    
+    rangen_data = temp_data(2:end,:); % replace original data with the one already processed, skipping first dummy activity, different for RG300
+
+else % no wrapped lines
+    rangen_data = rangen_data(4:end - dummy_node_offset,:); % remove header lines and dummy activities (start/end node)
+end
 
 % create TD matrix for durations
 TD = rangen_data(:,1); % store column vector with task durations

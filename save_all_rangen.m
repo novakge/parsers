@@ -11,7 +11,7 @@ save_instance('data/RG30/Set 3','rangen')
 save_instance('data/RG30/Set 4','rangen')
 save_instance('data/RG30/Set 5','rangen')
 fprintf('...');
-save_instance('data/RG300_corr','rangen')
+save_instance('data/RG300','rangen')
 fprintf('...');
 save_instance('data/SMCP','rangen')
 fprintf('still working...');
