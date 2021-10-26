@@ -1,9 +1,16 @@
-% patterson format description and examples: http://www.p2engine.com/p2reader/patterson_format
-% already available results for comparison:
-% -> all data: http://www.projectmanagement.ugent.be/sites/default/files/files/datasets/AboutData.zip
-% -> summary excel including indicators: http://www.projectmanagement.ugent.be/sites/default/files/files/datasets/Datasets%20with%20Parameters%20and%20BKS.xlsx
-% input: file with patterson format (e.g. *.rcp, *.prb)
-% example: PDM = parse_rangen('test_data/pat80.rcp', 2) where 1=NTP, 2=CTP, 3=DTP simulation type
+% Patterson original description and examples: http://www.p2engine.com/p2reader/patterson_format
+% RCMP (patterson based multiproject format) description and examples: https://www.projectmanagement.ugent.be/sites/default/files/datasets/RCMPSP/Blueprint%20RCMP.txt
+%  or https://www.projectmanagement.ugent.be/sites/default/files/datasets/RCMPSP/RCMPSP_DataFormat.pdf
+% Summary excel for each of the below datasets containing indicators can be found in the following zips:
+%  MPSPLIB: https://www.projectmanagement.ugent.be/sites/default/files/datasets/RCMPSP/MPSPLIB.zip
+%  RCMPSPLIB: https://www.projectmanagement.ugent.be/sites/default/files/datasets/RCMPSP/RCMPSPLIB.zip
+%  BY: https://www.projectmanagement.ugent.be/sites/default/files/datasets/RCMPSP/BY.zip
+%
+% input: file with rcmp format (e.g. *.rcmp)
+% example_1: PDM = parse_rangen('test_data/HHH0.rcmp', 2) where 1=NTP, 2=CTP, 3=DTP simulation type
+% example_2: PDM = parse_rangen('test_data/MP-MD3.rcmp', 2) where 1=NTP, 2=CTP, 3=DTP simulation type
+% example_3: PDM = parse_rangen('test_data/mp_j120_a20_nr2.rcmp', 2) where 1=NTP, 2=CTP, 3=DTP simulation type
+% example_4: PDM = parse_rangen('test_data/BY_1_1_10.rcmp', 2) where 1=NTP, 2=CTP, 3=DTP simulation typeBY_1_1_10.rcmp
 % output: PDM file containing PDM = [DSM,TD,CD,{QD,RD}], format depending on the selected simulation type (trade-off problem)
 
 function [PDM, constr, num_r_resources, num_nr_resources, num_modes, num_activities, sim_type] = parse_rangen(file_name, sim_type)
@@ -12,7 +19,7 @@ function [PDM, constr, num_r_resources, num_nr_resources, num_modes, num_activit
 num_dummy_nodes = 2;
 dummy_node_offset = 1;
 duration_offset = 1;
-successors_offset = 1;
+successor_offset = 1;
 
 % read raw input data in matrix
 rangen_data = dlmread(file_name);
@@ -25,7 +32,7 @@ res_avail = rangen_data(2,1:num_r_resources); % store resources' availabilities
 
 % rg300 related offsets
 unwrapped_successors = 20; % maximal number of successors listed at a line
-successors_offset = duration_offset + num_r_resources + successors_offset;
+successors_offset = duration_offset + num_r_resources + successor_offset;
 wrap_flag = 1;
 
 % handle exceptions where 20+ successors present, but are not wrapped in newline
