@@ -72,7 +72,7 @@ RD = rangen_data(:,1+duration_offset : num_r_resources + duration_offset);
 % create CD matrix for cost demands; in this case CD = 1 for all
 CD = zeros(num_activities,1);
 
-rangen_data = rangen_data(:,duration_offset + num_r_resources + successors_offset + 1:end); % remove activity durations and resource requirements (columns 1 to n where n is number of resources)
+rangen_data = rangen_data(:,successors_offset + 1:end); % remove activity durations and resource requirements (columns 1 to n where n is number of resources)
 
 DSM = zeros(num_activities,num_activities); % pre-allocate n x n design structure matrix as output
 
