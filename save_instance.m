@@ -6,6 +6,7 @@
 % example #3: save_instance('data_folder', 'xlib')
 % example #3: save_instance('data_folder', 'progen')
 % example #4: save_instance('data_folder', 'boctor')
+% example #5: save_instance('data_folder', 'rcmp')
 
 function save_instance(directory, parser_type)
 
@@ -42,9 +43,15 @@ switch parser_type
             parser = @parse_boctor; % create common function handle
             extension_filter = '*.prb'; % select extension
         end
+        
+    case 'rcmp'
+        if exist('parse_rcmp') % RCMP, MPLIB1-2, BY, RCMPSPLIB
+            parser = @parse_rcmp; % create common function handle
+            extension_filter = '*.rcmp'; % select extension
+        end
 
     otherwise
-        error('Invalid parser type selected, please choose one of: rangen | protrack | xlib | progen | boctor \n');
+        error('Invalid parser type selected, please choose one of: rangen | protrack | xlib | progen | boctor | rcmp \n');
 end
 
 browse_dir = fullfile(directory, extension_filter); % look for all files with the extension in given subfolder

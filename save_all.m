@@ -11,6 +11,8 @@ fprintf('saving psplib/mmlib datasets...');
 save_all_xlib
 fprintf('saving boctor datasets...');
 save_all_boctor
+fprintf('saving rcmp datasets...');
+save_all_rcmp
 fprintf('all done!\n');
 toc;
 

@@ -76,7 +76,7 @@ verifyEqual(testCase,actSolution,expSolution,'AbsTol',0.01)
 end
 
 function test_RCMP_BY_OWN_002(testCase)
-[PDM,~,num_r_resources,~,~,num_activities,num_projects,~] = parse_rcmp(testCase.TestData.RCMP_BY_OWN_002,3); % DTP
+[PDM,~,num_r_resources,~,~,num_activities,~] = parse_rcmp(testCase.TestData.RCMP_BY_OWN_002,3); % DTP
 PDM_sel = cell2mat(PDM(2)); % select the 2nd project's PDM
 n = size(PDM_sel,1);
 TD_act = PDM_sel(:,n+1);

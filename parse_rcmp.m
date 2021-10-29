@@ -13,7 +13,7 @@
 % example_4: PDM = parse_rcmp('test_data/BY_10_3_32.rcmp', 3) where 1=NTP, 2=CTP, 3=DTP simulation type
 % output: cell containing PDM = [DSM,TD,CD,{QD,RD}] for each project, format depends on the selected simulation type (trade-off problem)
 
-function [PDM, constr, num_r_resources, num_nr_resources, num_modes, num_activities, num_projects, sim_type] = parse_rcmp(file_name, sim_type)
+function [PDM, constr, num_r_resources, num_nr_resources, num_modes, num_activities, sim_type] = parse_rcmp(file_name, sim_type)
 
 opts = delimitedTextImportOptions;
 opts.Delimiter = [" ", ":"];
