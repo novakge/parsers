@@ -7,10 +7,8 @@
 %  BY: https://www.projectmanagement.ugent.be/sites/default/files/datasets/RCMPSP/BY.zip
 %
 % input: file with rcmp format (e.g. *.rcmp)
-% example_1: PDM = parse_rcmp('test_data/HHH0.rcmp', 0) where 1=NTP, 2=CTP, 3=DTP simulation type
-% example_2: PDM = parse_rcmp('test_data/MP-MD3.rcmp', 1) where 1=NTP, 2=CTP, 3=DTP simulation type
-% example_3: PDM = parse_rcmp('test_data/mp_j120_a20_nr2.rcmp', 2) where 1=NTP, 2=CTP, 3=DTP simulation type
-% example_4: PDM = parse_rcmp('test_data/BY_10_3_32.rcmp', 3) where 1=NTP, 2=CTP, 3=DTP simulation type
+% example #1: PDM = parse_rcmp('test_data/mp_j120_a20_nr2.rcmp', 2) where 1=NTP, 2=CTP, 3=DTP simulation type
+% example #2: PDM = parse_rcmp('test_data/BY_10_3_32.rcmp', 3) where 1=NTP, 2=CTP, 3=DTP simulation type
 % output: cell containing PDM = [DSM,TD,CD,{QD,RD}] for each project, format depends on the selected simulation type (trade-off problem)
 
 function [PDM, constr, num_r_resources, num_nr_resources, num_modes, num_activities, sim_type] = parse_rcmp(file_name, sim_type)
@@ -23,7 +21,7 @@ opts.LeadingDelimitersRule = "ignore";
 
 % read in data from file
 rcmp_data = readmatrix(file_name, opts);
-rcmp_data = str2double(rcmp_data);
+rcmp_data = double(string(rcmp_data));
 
 % preprocessing, remove empty lines and columns
 rcmp_data(all(isnan(rcmp_data),2),:) = [];
@@ -59,6 +57,7 @@ for i=2:num_projects
 end
 
 % get resource selection for each projects
+res_selection = zeros(num_projects, num_r_resources); % pre-allocate for speed
 for i=1:num_projects
     % (i-1) excludes rows with the resource assignment for the actual project
     % (2*i-1) excludes row of actual num_activities
@@ -97,7 +96,7 @@ dsm_data = cell(num_projects,1);
 for k=1:num_projects
     
     temp_relations = relations_data{k,1}; % load actual project into a temp array
-    temp_dsm = 0; % reset temp array
+    temp_dsm = zeros(n(1,k)); % reset temp array
     
     for i=1:n(1,k) % iterate through rows
         
