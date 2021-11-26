@@ -63,7 +63,7 @@ end
 
 % determine number of activities from jobs line
 delimiter = {'  ','\t',' '};
-formatSpec = '%*s%*s%*s%*s%d%*[^\n\r]';
+formatSpec = '%*s%*s%*s%*s%f%*[^\n\r]';
 frewind(file_id);
 textscan(file_id, '%[^\n\r]', line_jobs-1, 'WhiteSpace', '', 'ReturnOnError', false);
 num_activities = textscan(file_id, formatSpec, 1, 'Delimiter', delimiter, 'TextType', 'string', 'ReturnOnError', false, 'EndOfLine', '\r\n');
@@ -71,7 +71,7 @@ num_activities = cell2mat(num_activities) - 2; % remove dummy activities and con
 
 % determine number of resources for renewable resource types
 delimiter = {'  ','\t',' ',':'};
-formatSpec = '%*s%*s%d%*[^\n\r]';
+formatSpec = '%*s%*s%f%*[^\n\r]';
 frewind(file_id);
 textscan(file_id, '%[^\n\r]', line_renewable-1, 'WhiteSpace', '', 'ReturnOnError', false);
 num_r_resources = textscan(file_id, formatSpec, 1, 'Delimiter', delimiter, 'MultipleDelimsAsOne', true, 'TextType', 'string', 'ReturnOnError', false, 'EndOfLine', '\r\n');
@@ -79,7 +79,7 @@ num_r_resources = cell2mat(num_r_resources);
 
 % determine number of resources for non-renewable resource types
 delimiter = {'  ','\t',' ',':'};
-formatSpec = '%*s%*s%d%*[^\n\r]';
+formatSpec = '%*s%*s%f%*[^\n\r]';
 frewind(file_id);
 textscan(file_id, '%[^\n\r]', line_nonrenewable-1, 'WhiteSpace', '', 'ReturnOnError', false);
 num_nr_resources = textscan(file_id, formatSpec, 1, 'Delimiter', delimiter, 'MultipleDelimsAsOne', true, 'TextType', 'string', 'ReturnOnError', false, 'EndOfLine', '\r\n');
@@ -87,7 +87,7 @@ num_nr_resources = cell2mat(num_nr_resources);
 
 % determine number of resources for doubly-constrained resource types
 delimiter = {'  ','\t',' ',':'};
-formatSpec = '%*s%*s%*s%d%*[^\n\r]';
+formatSpec = '%*s%*s%*s%f%*[^\n\r]';
 frewind(file_id);
 textscan(file_id, '%[^\n\r]', line_dbl_constrained-1, 'WhiteSpace', '', 'ReturnOnError', false);
 num_dc_resources = textscan(file_id, formatSpec, 1, 'Delimiter', delimiter, 'MultipleDelimsAsOne', true, 'TextType', 'string', 'ReturnOnError', false, 'EndOfLine', '\r\n');
@@ -142,7 +142,7 @@ delimiter = {'\t','    ','         '};
 frewind(file_id); % need to rewind text read pointer
 textscan(file_id, '%[^\n\r]', line_requests+3, 'WhiteSpace', '', 'ReturnOnError', false);
 % determine formatspec dynamically based on number of resource columns for all rows determined by #modes x #activities
-res_mode_dur_req = textscan(file_id, repmat('%d', 1, num_r_resources+num_nr_resources+num_dc_resources+3), sum(num_modes), 'Delimiter', delimiter, 'TextType', 'string', 'EmptyValue', 0, 'ReturnOnError', false, 'EndOfLine', '\r\n');
+res_mode_dur_req = textscan(file_id, repmat('%f', 1, num_r_resources+num_nr_resources+num_dc_resources+3), sum(num_modes), 'Delimiter', delimiter, 'TextType', 'string', 'EmptyValue', 0, 'ReturnOnError', false, 'EndOfLine', '\r\n');
 res_mode_dur_req = cell2mat(res_mode_dur_req); % convert to numeric values
 % NOTE: in case of new formats, first column need to be considered. When modes >1, the first column (job#) is empty -> must be zero when parsed.
 
@@ -155,7 +155,7 @@ if (psplib_flag == true)
 else
     textscan(file_id, '%[^\n\r]', line_res_avail, 'WhiteSpace', '', 'ReturnOnError', false); % format differs by one line for psplib/mmlib
 end
-res_avail = textscan(file_id, repmat('%d', 1, num_r_resources+num_nr_resources+num_dc_resources), 1, 'Delimiter', delimiter, 'MultipleDelimsAsOne', true, 'TextType', 'string', 'ReturnOnError', false, 'EndOfLine', '\r\n');
+res_avail = textscan(file_id, repmat('%f', 1, num_r_resources+num_nr_resources+num_dc_resources), 1, 'Delimiter', delimiter, 'MultipleDelimsAsOne', true, 'TextType', 'string', 'ReturnOnError', false, 'EndOfLine', '\r\n');
 res_avail = cell2mat(res_avail); % convert to numeric values
 
 
