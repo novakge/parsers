@@ -18,27 +18,28 @@ testCase.TestData.MMLIB50_001 = 'test_data/J5050_1.mm';
 testCase.TestData.MMLIB_OWN_001 = 'test_data/test001.mm';
 testCase.TestData.MMLIB_OWN_002 = 'test_data/J50100_1_mod.mm';
 testCase.TestData.PSPLIB_001 = 'test_data/c1510_10.mm';
+testCase.TestData.PSPLIB_002 = 'test_data/j306_9.sm';
 testCase.TestData.PSPLIB_OWN_001 = 'test_data/c1510_1_mod.mm';
 end
 
 function test_MMLIB100_001(testCase)
 [i1,i2,i3,i4,i5,i6] = indicators(parse_xlib(testCase.TestData.MMLIB100_001,0));
 actSolution = [i1,i2,i3,i4,i5,i6];
-expSolution = [100, 0.121, 0.139, 0.154, 0.907, 0.067]; % see also results of "Datasets with Parameters and BKS (BVersion 3 - 2017.xlsx"
+expSolution = [100, 0.121, 0.139, 0.154, 0.907, 0.067]; % see also results of "Datasets with Parameters and BKS (BVersion 3 - 2017).xlsx"
 verifyEqual(testCase,actSolution,expSolution,'AbsTol',0.01)
 end
 
 function test_MMLIBPLUS_001(testCase)
 [i1,i2,i3,i4,i5,i6] = indicators(parse_xlib(testCase.TestData.MMLIBPLUS_001,0));
 actSolution = [i1,i2,i3,i4,i5,i6];
-expSolution = [100, 0.121, 0.156, 0.189, 0.9, 0.082]; % see also results of "Datasets with Parameters and BKS (BVersion 3 - 2017.xlsx"
+expSolution = [100, 0.121, 0.156, 0.189, 0.9, 0.082]; % see also results of "Datasets with Parameters and BKS (BVersion 3 - 2017).xlsx"
 verifyEqual(testCase,actSolution,expSolution,'AbsTol',0.01)
 end
 
 function test_MMLIB50_001(testCase)
 [i1,i2,i3,i4,i5,i6] = indicators(parse_xlib(testCase.TestData.MMLIB50_001,0));
 actSolution = [i1,i2,i3,i4,i5,i6];
-expSolution = [50, 0.122, 0.31, 0.147, 0.813, 0.213]; % see also results of "Datasets with Parameters and BKS (BVersion 3 - 2017.xlsx"
+expSolution = [50, 0.122, 0.31, 0.147, 0.813, 0.213]; % see also results of "Datasets with Parameters and BKS (BVersion 3 - 2017).xlsx"
 verifyEqual(testCase,actSolution,expSolution,'AbsTol',0.01)
 end
 
@@ -74,7 +75,14 @@ end
 function test_PSPLIB_001(testCase)
 [i1,i2,i3,i4,i5,i6] = indicators(parse_xlib(testCase.TestData.PSPLIB_001,0));
 actSolution = [i1,i2,i3,i4,i5,i6];
-expSolution = [16, i2, i3, i4, i5, i6]; % see also results of "Datasets with Parameters and BKS (BVersion 3 - 2017.xlsx"
+expSolution = [16, i2, i3, i4, i5, i6]; % see also results of "Datasets with Parameters and BKS (BVersion 3 - 2017).xlsx"
+verifyEqual(testCase,actSolution,expSolution,'AbsTol',0.01)
+end
+
+function test_PSPLIB_002(testCase)
+[i1,i2,i3,i4,i5,i6] = indicators(parse_xlib(testCase.TestData.PSPLIB_002,0));
+actSolution = [i1,i2,i3,i4,i5,i6];
+expSolution = [30, 0.276, 0.357, 0.011, 0.705, 0.238]; % see also results of "Datasets with Parameters and BKS (BVersion 3 - 2017).xlsx"
 verifyEqual(testCase,actSolution,expSolution,'AbsTol',0.01)
 end
 
