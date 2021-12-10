@@ -1,4 +1,4 @@
-% batch processing of *.sm / *.mm / *.p2x / *.rcp / *.sch / *.prb files to (parsed) *.mat files as an input for simulation
+% batch processing of *.sm / *.mm / *.p2x / *.rcp / *.sch / *.prb / *.rcmp files to (parsed) *.mat files as an input for simulation
 % input: <folder name> containing files in the given format and extension
 % output: parsed *.mat file for each input file stored in ../<folder name>/output folder
 % example #1: save_instance('data_folder', 'rangen')
