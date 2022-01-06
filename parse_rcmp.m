@@ -118,7 +118,7 @@ inter_relations = inter_relations(topo_order);
 rd_data = rd_data(topo_order);
 td_data = td_data(topo_order);
 release_dates = release_dates(topo_order);
-res_selection = res_selection(topo_order);
+res_selection = res_selection(topo_order,:);
 num_successors_data = num_successors_data(topo_order); % not used
 num_activities = num_activities(topo_order); % sort n to get sum of indices easier, when number of tasks is different b/w projects
 n = n(topo_order);
@@ -216,7 +216,7 @@ switch sim_type
     case 0 % debug, DSM only
         
         PDM = dsm_set; % for tests
-        ddd
+        
     case 1 % NTP
         
         % merge DSM,TD,CD,RD into PDM for each projects
