@@ -19,7 +19,7 @@ opts.EmptyLineRule = "read";
 opts.ConsecutiveDelimitersRule = "join";
 opts.LeadingDelimitersRule = "ignore";
 
-% read in data from file
+% read the data from file
 rcmp_data = readmatrix(file_name, opts);
 rcmp_data = double(string(rcmp_data));
 
@@ -27,15 +27,15 @@ rcmp_data = double(string(rcmp_data));
 rcmp_data(all(isnan(rcmp_data),2),:) = [];
 rcmp_data(:,all(isnan(rcmp_data),2)) = [];
 
-% read number of projects from 1st row
+% read number of projects from the 1st row
 num_projects = rcmp_data(1,1);
 
-% read number of renewable resources from 2nd row
-num_r_resources = rcmp_data(2,1);
+% read number of renewable resources from the 2nd row
+num_r_resources = rcmp_data(2,1); % all projects have the same number of resources
 num_nr_resources = 0; % no non-renewable resource in this dataset
 num_dc_resources = 0; % no doubly-constrained resource in this dataset
 
-% read renewable resources availability
+% read each renewable resources availability
 for i=1:num_r_resources
     res_avail(1,i) = rcmp_data(3,i);
 end
@@ -44,27 +44,28 @@ header_offset = 4;
 dummy_node_offset = 1;
 num_dummy_nodes = 2;
 
+% end of static data
+
 % get number of activities and release dates for each project
 num_activities(1,1) = rcmp_data(header_offset,1); % first project is always at row 4 col 1
-n(1,1) = num_activities(1,1) - num_dummy_nodes;
+n(1,1) = num_activities(1,1) - num_dummy_nodes; % n is the number of activities for the given project without dummy nodes
 release_dates(1,1) = rcmp_data(header_offset,2); % first project is always at row 4 col 2
 for i=2:num_projects
-    % (i-1) excludes rows with the resource assignment for the actual project
-    % (2*i-2) excludes row of actual num_activities
-    num_activities(1,i) = rcmp_data(header_offset + (i-1) * num_activities(1,(i-1)) + (2*i-2),1);
-    n(1,i) = num_activities(1,i) - num_dummy_nodes;
-    release_dates(1,i) = rcmp_data(header_offset + (i-1) * num_activities(1,(i-1)) + (2*i-2),2);
+    % excluding rows for resource assignment of the actual project
+    % (2*i-2) excludes the row with actual number of activities
+    num_activities(1,i) = rcmp_data(header_offset + sum(num_activities(1,1:(i-1))) + (2*i-2),1); % with dummies
+    n(1,i) = num_activities(1,i) - num_dummy_nodes; % without dummies
+    release_dates(1,i) = rcmp_data(header_offset + sum(num_activities(1,1:(i-1))) + (2*i-2),2);
 end
 
 % get resource selection for each projects
 res_selection = zeros(num_projects, num_r_resources); % pre-allocate for speed
 for i=1:num_projects
-    % (i-1) excludes rows with the resource assignment for the actual project
-    % (2*i-1) excludes row of actual num_activities
-    res_selection(i,1:num_r_resources) = rcmp_data(header_offset + (i-1) * num_activities(1,i) + (2*i-1),1:num_r_resources);
+    % (2*i-1) excludes the row with actual number of activities
+    res_selection(i,1:num_r_resources) = rcmp_data(header_offset + sum(num_activities(1,1:i-1)) + (2*i-1),1:num_r_resources);
 end
 
-% store matrices (could be of a different size) in a cell array
+% store matrices (sizes might be different) in a cell array
 td_data = cell(num_projects,1);
 rd_data = cell(num_projects,1);
 num_successors_data = cell(num_projects,1);
@@ -73,60 +74,120 @@ successor_offset = 1;
 
 for i=1:num_projects
     % extract durations for each task and project
-    td_data{i,1} = rcmp_data(header_offset + 2 * dummy_node_offset + (i-1) * num_activities(1,i) + (2*i-1) : header_offset + 2 * dummy_node_offset + (i-1) * num_activities(1,i) + (2*i-4) + num_activities(1,i),1);
+    td_data{i,1} = rcmp_data(header_offset + 2 * dummy_node_offset + sum(num_activities(1,1:i-1)) + (2*i-1) : header_offset + 2 * dummy_node_offset + sum(num_activities(1,1:i)) + (2*i-4), 1);
     
     % extract resource demands for each task and project
-    rd_data{i,1} = rcmp_data(header_offset + 2 * dummy_node_offset + (i-1) * num_activities(1,i) + (2*i-1) : header_offset + 2 * dummy_node_offset + (i-1) * num_activities(1,i) + (2*i-4) + num_activities(1,i),duration_offset+1:duration_offset+num_r_resources);
+    rd_data{i,1} = rcmp_data(header_offset + 2 * dummy_node_offset + sum(num_activities(1,1:i-1)) + (2*i-1) : header_offset + 2 * dummy_node_offset + sum(num_activities(1,1:i)) + (2*i-4), duration_offset+1 : duration_offset+num_r_resources);
     
     % extract number of successors for each task and project
-    num_successors_data{i,1} = rcmp_data(header_offset + 2 * dummy_node_offset + (i-1) * num_activities(1,i) + (2*i-1) : header_offset + 2 * dummy_node_offset + (i-1) * num_activities(1,i) + (2*i-4) + num_activities(1,i),duration_offset + num_r_resources + successor_offset);
+    num_successors_data{i,1} = rcmp_data(header_offset + 2 * dummy_node_offset + sum(num_activities(1,1:i-1)) + (2*i-1) : header_offset + 2 * dummy_node_offset + sum(num_activities(1,1:i)) + (2*i-4), duration_offset + num_r_resources + successor_offset);
 end
 
 % extract relations for further processing of successors
-relations_data = cell(num_projects,1);
+local_relations = cell(num_projects,1);
 inter_relations = cell(num_projects,1);
 for i=1:num_projects
-    temp_relations = rcmp_data(header_offset + 2 * dummy_node_offset + (i-1) * num_activities(1,i) + (2*i-1) : header_offset + 2 * dummy_node_offset + (i-1) * num_activities(1,i) + (2*i-4) + num_activities(1,i),duration_offset + num_r_resources + successor_offset + 1 : end);
-    inter_relations{i,1} = temp_relations(:,1:2:end); % store inter-project relations
-    relations_data{i,1} = temp_relations(:,2:2:end); % store task dependencies
+    temp_all_relations = rcmp_data(header_offset + 1 + sum(num_activities(1,1:i-1)) + (2*i-1) : header_offset + 3 + sum(num_activities(1,1:i)) + (2*i-4) , duration_offset + num_r_resources + successor_offset + 1 : end); % extract all (both local+inter-project) dependencies for the given project
+    local_relations{i,1} = temp_all_relations(:,2:2:end); % store task dependencies, including dummy nodes
+    inter_relations{i,1} = temp_all_relations(:,1:2:end); % store inter-project dependencies, including dummy nodes
 end
 
-% construct DSM for each project
-dsm_data = cell(num_projects,1);
+% create binary adjacency matrix of projects based on any inter-project relationships (e.g. due to relation of dummy nodes. or any task relation between projects)
+adj_matrix = zeros(num_projects);
 for k=1:num_projects
-    
-    temp_relations = relations_data{k,1}; % load actual project into a temp array
-    temp_dsm = zeros(n(1,k)); % reset temp array
-    
-    for i=1:n(1,k) % iterate through rows
-        
-        temp_dsm(i,i) = 1; % put "1" on diagonal for each fix activity node
-        
-        for j=1:size(temp_relations,2) % iterate through # of columns
-            
-            if (temp_relations(i,j) > i) % consider successor activities only (upper triangle) also exclude zeros
-                
-                if (temp_relations(i,j) <= n(1,k) + dummy_node_offset) % exclude end activity
-                    
-                    activity_index = temp_relations(i,j) - dummy_node_offset; % use offset for dummy end node
-                    temp_dsm(i,activity_index) = 1; % put "1" for each line between two nodes
-                    
+    temp_inter_relations = inter_relations{k,1}; % load inter project dependencies for the current project to a temp array
+    for i=1:num_activities(1,k) % iterate through rows of actual project
+       for j=1:size(temp_inter_relations,2) % iterate through columns of actual project
+            if (~isnan(temp_inter_relations(i,j)) && temp_inter_relations(i,j) > 0) % if it is a valid relationship
+                if (temp_inter_relations(i,j) ~= k) % if the relationship is with another project
+                    adj_matrix(k,temp_inter_relations(i,j)) = 1; % add any inter-project dependency
                 end
             end
-        end
-    end    
-    dsm_data{k,1} = temp_dsm;
-end
-
-
-% make a check and give warning if there is an actual dependency between projects as it is not yet supported
-for i=1:num_projects
-    idx = find(inter_relations{i,1}(:,:) ~= i & ~isnan(inter_relations{i,1}(:,:)));
-    if size(idx)
-        warning('at least one task have inter-project dependency (linear index %d), not yet supported by the parser!\n', idx(1));
+       end
     end
 end
-% TODO consider inter-project relations of tasks (currently not present in any of the databases, but the possibility is there)
+
+% sort binary adjacency matrix topologically to get the topological order of projects
+[topo_order,MPDM] = toposort(digraph(adj_matrix));
+MPDM = full(adjacency(MPDM)); % MPDM is the adjacency matrix of all projects topologicaly ordered
+MPDM = MPDM + eye(num_projects); % where diagonal is filled with ones (flexible projects will be deleted afterwards if needed)
+
+% re-order all data with the newly calculated topological order
+local_relations = local_relations(topo_order);
+inter_relations = inter_relations(topo_order);
+rd_data = rd_data(topo_order);
+td_data = td_data(topo_order);
+release_dates = release_dates(topo_order);
+res_selection = res_selection(topo_order);
+num_successors_data = num_successors_data(topo_order); % not used
+num_activities = num_activities(topo_order); % sort n to get sum of indices easier, when number of tasks is different b/w projects
+n = n(topo_order);
+
+% pre-allocate the DSM superset with ones in the diagonal
+dsm_set = eye(sum(num_activities)); 
+
+% calculate some offset constants to help filling the DSM superset
+prj_offsets = cumsum([0,num_activities]); % add offsets based on number of activities (including dummies) starting with 0 for the first project
+prj_offsets(end) = []; % delete unused offset at the end, to keep a valid size of vector
+
+% go through DSM superset and set both task and inter-project dependencies including dummies
+for k=1:num_projects
+    
+    temp_inter_relations = inter_relations{k,1}; % load inter project dependencies for the current project to a temp array
+    temp_local_relations = local_relations{k,1}; % do not remove start-end dummies
+    
+    for i=1:num_activities(k) % iterate through rows of all projects
+        for j=1:size(temp_inter_relations,2) % iterate through columns of actual project, using the fact that inter-project relations has the same size as project relations
+            
+            if (~isnan(temp_inter_relations(i,j)) && temp_inter_relations(i,j) > 0) % check if it is a valid relationship between projects
+                
+                prj = find(topo_order == temp_inter_relations(i,j)); % find new index of project in the topological order
+                
+                if prj == k % consider task dependencies
+                    if (temp_local_relations(i,j) <= num_activities(k)) % check for out of bound task relations
+                        dsm_set(prj_offsets(k)+i, prj_offsets(k)+temp_local_relations(i,j)) = 1; % add any project dependency
+                    end
+                end
+                
+                if prj > k % consider inter-project dependencies (only successors, already topologically sorted)
+                    if (temp_local_relations(i,j) <= num_activities(prj)) % check for out of bound project relations
+                        dsm_set(prj_offsets(k)+i, prj_offsets(prj)+temp_local_relations(i,j)) = 1; % add any inter-project dependency
+                    end
+                end
+                
+            end
+        end
+    end
+end
+
+
+% extract individual DSMs from superset
+dsm_data = cell(num_projects,1);
+row = 1;
+for i=1:num_projects
+    dsm_data{i,1} = dsm_set(row+dummy_node_offset:sum(num_activities(1,1:i))-dummy_node_offset, row+dummy_node_offset:sum(num_activities(1,1:i))-dummy_node_offset); % removing dummies from standalone DSM-s
+    row = sum(num_activities(1:i)) + 1; % TODO optimize later with a lookup table for sum rather than calculating it all the time
+end
+
+% list all dummy nodes that needs to be removed (num_projects x 2)
+% tasks are removed in reverse to avoid decreasing indices when deleting
+tasks_to_remove = sum(num_activities); % always remove the last element
+for i=numel(num_activities)-1:-1:1
+    tasks_to_remove = [tasks_to_remove sum(num_activities(1,1:i))+1, sum(num_activities(1,1:i))];
+end
+tasks_to_remove(end+1) = 1; % also remove the first element
+
+
+% step 1: find all incoming edges of dummy tasks and connect them to their successors
+for i=1:numel(tasks_to_remove)
+    dsm_set(tasks_to_remove(i),tasks_to_remove(i)) = 0; % put zero for the tasks to be removed
+    idx = find(dsm_set(tasks_to_remove(i),:)==1); % get all successors indices (values in the same row and columns to the right)
+    dsm_set(:,idx) = or(dsm_set(:,idx),dsm_set(:,tasks_to_remove(i))); % if already connected, leave it as it is, otherwise set the relationship
+end
+ 
+% step 2: remove all dummies
+dsm_set(tasks_to_remove,:) = []; % mark all unnecessary incoming edges
+dsm_set(:,tasks_to_remove) = []; % mark all unnecessary edges
 
 % initialize default constraint row vector
 constr = 0; % initialize constraint matrix, constr = [Ct=1,Cc=1,{Cq=1},{Cr=r},Cs=1]
@@ -154,15 +215,19 @@ switch sim_type
     
     case 0 % debug, DSM only
         
-        PDM = dsm_data; % for tests
-        
+        PDM = dsm_set; % for tests
+        ddd
     case 1 % NTP
         
         % merge DSM,TD,CD,RD into PDM for each projects
         for i=1:num_projects
-            PDM{i,1} = [dsm_data{i,1} td_data{i,1} cd_data{i,1} rd_data{i,1}];
-            PDM{i,1} = cat(2,PDM{i,:});
+            XD{i,1} = [td_data{i,1} cd_data{i,1} rd_data{i,1}];
+            XD{i,1} = cat(2,XD{i,:});
         end
+        
+        PDM = [dsm_set, cat(1,XD{:})]; % return PDM as a merged DSM superset + TD/CD/RD/...
+        
+        % alternatively, return as separate PDM cell array... also prepare indicators for that.
         
         constr = [-1,-1,Cr,1]; % [Ct=1,Cc=1,{Cq=1},{Cr=r},Cs=1]
 
