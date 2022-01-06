@@ -219,7 +219,7 @@ switch sim_type
         
     case 1 % NTP
         
-        % merge DSM,TD,CD,RD into PDM for each projects
+        % merge DSM,TD,CD,RD into a superset PDM containing all projects
         for i=1:num_projects
             XD{i,1} = [td_data{i,1} cd_data{i,1} rd_data{i,1}];
             XD{i,1} = cat(2,XD{i,:});
@@ -227,41 +227,64 @@ switch sim_type
         
         PDM = [dsm_set, cat(1,XD{:})]; % return PDM as a merged DSM superset + TD/CD/RD/...
         
-        % alternatively, return as separate PDM cell array... also prepare indicators for that.
+        % individual PDMs are created in a cell array (e.g. for analyzing indicators separately), ignoring inter-project relationships
+        for i=1:num_projects
+            pdm_data{i,1} = [dsm_data{i,1} td_data{i,1} cd_data{i,1} rd_data{i,1}];
+            pdm_data{i,1} = cat(2,pdm_data{i,:});
+        end
         
         constr = [-1,-1,Cr,1]; % [Ct=1,Cc=1,{Cq=1},{Cr=r},Cs=1]
+        
+        num_modes = 1; % for NTP we have only one mode
 
     case 2 % CTP
 
         % number of modes is always one in this dataset, anyway, prepare a valid format
         
+        % prepare individual project data
         for i=1:num_projects
             td_ctp{i,1} = cat(2,td_data{i,:},td_data{i,:}); % duplicate TD to have lower/upper range as n x 2 matrix
             cd_ctp{i,1} = cat(2,cd_data{i,:},cd_data{i,:}); % duplicate CD to have lower/upper range as n x 2 matrix
             rd_ctp{i,1} = repelem(rd_data{i,1},1,2); % duplicate each column / resource demand to have lower/upper range as n x 2r matrix
-            PDM{i,1} = [dsm_data{i,1} td_ctp{i,1} cd_data{i,1} rd_data{i,1}];
-            PDM{i,1} = cat(2,PDM{i,:});
+            pdm_data{i,1} = [dsm_data{i,1} td_ctp{i,1} cd_data{i,1} rd_data{i,1}];
+            pdm_data{i,1} = cat(2,pdm_data{i,:});
         end
         
-        constr =  [-1,-1,Cr,1]; % [Ct=1,Cc=1,{Cq=1},{Cr=r},Cs=1]
+        % merge DSM,TD,CD,RD into a superset PDM containing all projects
+        for i=1:num_projects
+            XD{i,1} = [td_ctp{i,1} cd_ctp{i,1} rd_ctp{i,1}];
+            XD{i,1} = cat(2,XD{i,:});
+        end
+        
+        PDM = [dsm_set, cat(1,XD{:})]; % return PDM as a merged DSM superset + TD/CD/RD/...
 
-        sim_type = -1; % indicate that this type is not supported for rcmp datasets
+        constr = [-1,-1,Cr,1]; % [Ct=1,Cc=1,{Cq=1},{Cr=r},Cs=1]
+
+        num_modes = 2; % for CTP, two modes are considered
 
     case 3 % DTP
         
         % number of modes is always one in this dataset, anyway, prepare a valid format
-        % merge DSM,TD,CD,RD into PDM for each projects
+        % merge DSM,TD,CD,RD into a superset PDM containing all projects
         for i=1:num_projects
-            PDM{i,1} = [dsm_data{i,1} td_data{i,1} cd_data{i,1} rd_data{i,1}];
-            PDM{i,1} = cat(2,PDM{i,:});
+            XD{i,1} = [td_data{i,1} cd_data{i,1} rd_data{i,1}];
+            XD{i,1} = cat(2,XD{i,:});
+        end
+        
+        PDM = [dsm_set, cat(1,XD{:})]; % return PDM as a merged DSM superset + TD/CD/RD/...
+        
+        % individual PDMs are created in a cell array (e.g. for analyzing indicators separately), ignoring inter-project relationships
+        for i=1:num_projects
+            pdm_data{i,1} = [dsm_data{i,1} td_data{i,1} cd_data{i,1} rd_data{i,1}];
+            pdm_data{i,1} = cat(2,pdm_data{i,:});
         end
         
         constr = [-1,-1,Cr,1]; % [Ct=1,Cc=1,{Cq=1},{Cr=r},Cs=1]
         
-        sim_type = -1; % indicate that this type is not supported for rcmp datasets
+        num_modes = 1; % for DTP we also have only one mode in this dataset
         
     otherwise
-        fprintf('Not a valid TP: only 1=NTP, 2=CTP, 3=DTP,  simulation types are supported!\n');
+        fprintf('Not a valid TP: only 1=NTP, 2=CTP, 3=DTP simulation types are supported!\n');
 end
 
 end
