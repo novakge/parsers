@@ -6,7 +6,9 @@ fprintf('in progress...');
 save_instance('data/BY', 'rcmp')
 fprintf('...');
 save_instance('data/RCMPSPLIB', 'rcmp')
-
+fprintf('...');
+save_instance('data/MPSPLIB', 'rcmp')
+fprintf('...');
 save_instance('data/MPLIB1/MPLIB 1 - Set 1', 'rcmp')
 fprintf('...');
 save_instance('data/MPLIB1/MPLIB 1 - Set 2', 'rcmp')
