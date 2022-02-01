@@ -19,36 +19,42 @@ switch parser_type
             parser = @parse_rangen; % create common function handle
             extension_filter = '*.rcp'; % select extension
         end
+        multiproject = 0;
         
     case 'protrack'
         if exist('parse_protrack') % ProTrack (Real-Life)
             parser = @parse_protrack; % create common function handle
             extension_filter = '*.p2x'; % select extension
         end
+        multiproject = 0;
 
     case 'xlib'
         if exist('parse_xlib') % MMLIB, PSPLIB
             parser = @parse_xlib; % create common function handle
             extension_filter = '*.?m'; % select extension *.sm or *.mm depending on single/multimode instances
         end
+        multiproject = 0;
 
     case 'progen'
         if exist('parse_progen') % Progen/MAX (~PSPLIB)
             parser = @parse_progen; % create common function handle
             extension_filter = '*.sch'; % select extension
         end
+        multiproject = 0;
 
     case 'boctor'
         if exist('parse_progen') % Boctor
             parser = @parse_boctor; % create common function handle
             extension_filter = '*.prb'; % select extension
         end
+        multiproject = 0;
         
     case 'rcmp'
         if exist('parse_rcmp') % RCMP, MPLIB1-2, BY, RCMPSPLIB
             parser = @parse_rcmp; % create common function handle
             extension_filter = '*.rcmp'; % select extension
         end
+        multiproject = 1;
 
     otherwise
         error('Invalid parser type selected, please choose one of: rangen | protrack | xlib | progen | boctor | rcmp \n');
@@ -78,14 +84,25 @@ for i=1:size(files,1) % iterate through all files in given directory
     for j=1:size(TP,2) % go through the simulation types
        
     [~,filename,~] = fileparts(fullfile(files(i,1).folder,files(i,1).name)); % get filename without extension
+
+    if (multiproject == 0) % in case of single projects, no release date information is available
+        [PDM, constr, num_r_resources, num_nr_resources, num_modes, num_activities, sim_type] = parser(fullfile(files(i,1).folder,files(i,1).name),j); % parse all files for all simulation types
+        
+        if sim_type > 0 % save instance if the given simulation type is supported for the dataset, otherwise skip the given trade-off
+            save(strcat(out_dir,filename,'_',TP(1,j)),'PDM','constr','num_r_resources','num_nr_resources','num_modes','num_activities','sim_type'); % save each variable "PDM" to the <folder name>/output folder
+        end
     
-    [PDM, constr, num_r_resources, num_nr_resources, num_modes, num_activities, sim_type] = parser(fullfile(files(i,1).folder,files(i,1).name),j); % parse all files for all simulation types
+    else % in case of multiprojects, release dates information is available and needed
+        [PDM, constr, num_r_resources, num_nr_resources, num_modes, num_activities, sim_type, release_dates] = parser(fullfile(files(i,1).folder,files(i,1).name),j); % parse all files for all simulation types
+        
+        if sim_type > 0 % save instance if the given simulation type is supported for the dataset, otherwise skip the given trade-off
+            save(strcat(out_dir,filename,'_',TP(1,j)),'PDM','constr','num_r_resources','num_nr_resources','num_modes','num_activities','sim_type','release_dates'); % save each variable "PDM" to the <folder name>/output folder
+        end
     
-    if sim_type > 0 % if the given simulation type is supported for the dataset
-        save(strcat(out_dir,filename,'_',TP(1,j)),'PDM','constr','num_r_resources', 'num_nr_resources', 'num_modes','num_activities','sim_type'); % save each variable "PDM" to the <folder name>/output folder
-    else
-        % skip the given trade-off for this instance (not supported)
     end
+
+    
+    
         
     if (j == 1) % save DSM only once per file for debug
         DSM = parser(fullfile(files(i,1).folder,files(i,1).name),0); % parse only DSM
