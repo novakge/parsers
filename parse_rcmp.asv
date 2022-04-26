@@ -21,7 +21,12 @@ opts.LeadingDelimitersRule = "ignore";
 
 % read the data from file
 rcmp_data = readmatrix(file_name, opts);
-rcmp_data = str2double(rcmp_data);
+
+for ii = 1:size(rcmp_data,1)
+    for jj = size(rcmp_data,2)
+        rcmp_data() = double(string(rcmp_data));
+    end
+end
 
 % preprocessing, remove empty lines and columns
 rcmp_data(all(isnan(rcmp_data),2),:) = [];

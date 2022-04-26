@@ -34,7 +34,7 @@ function test_RCMP_BY_002(testCase)
 DSM = DSM(1:num_activities(1),1:num_activities(1)); % select first project's DSM
 [i1,i2,i3,i4,i5,i6] = indicators(DSM);
 actSolution = [i1,i2,i3,i4,i5,i6];
-expSolution = [20,0.052,0.444,0,1,0.611];
+expSolution = [20,0.1,0.29,0.01,0.2,0.47];
 verifyEqual(testCase,actSolution,expSolution,'AbsTol',0.01)
 end
 
