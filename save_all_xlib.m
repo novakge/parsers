@@ -3,20 +3,53 @@
 function save_all_xlib
 tic;
 fprintf('in progress...');
-save_instance('data/c15mm', 'xlib')
+save_instance('data/PSPLIB/j30sm', 'xlib')
 fprintf('...');
-save_instance('data/j20mm', 'xlib')
+save_instance('data/PSPLIB/j60sm', 'xlib')
 fprintf('...');
-save_instance('data/j30sm', 'xlib')
+save_instance('data/PSPLIB/j90sm', 'xlib')
 fprintf('...');
-save_instance('data/j30mm', 'xlib')
+save_instance('data/PSPLIB/j120sm', 'xlib')
+fprintf('still working...');
+
+save_instance('data/PSPLIB/c15mm', 'xlib')
 fprintf('...');
-save_instance('data/m1mm', 'xlib')
+save_instance('data/PSPLIB/c21mm', 'xlib')
 fprintf('...');
-save_instance('data/m2mm', 'xlib')
+save_instance('data/PSPLIB/j10mm', 'xlib')
 fprintf('...');
-save_instance('data/n1mm', 'xlib')
+save_instance('data/PSPLIB/j12mm', 'xlib')
 fprintf('...');
+save_instance('data/PSPLIB/j20mm', 'xlib')
+fprintf('...');
+save_instance('data/PSPLIB/j30mm', 'xlib')
+fprintf('still working...');
+
+save_instance('data/PSPLIB/m1mm', 'xlib')
+fprintf('...');
+save_instance('data/PSPLIB/m2mm', 'xlib')
+fprintf('...');
+save_instance('data/PSPLIB/m4mm', 'xlib')
+fprintf('...');
+save_instance('data/PSPLIB/m5mm', 'xlib')
+fprintf('still working...');
+
+save_instance('data/PSPLIB/n0mm', 'xlib')
+fprintf('...');
+save_instance('data/PSPLIB/n1mm', 'xlib')
+fprintf('...');
+save_instance('data/PSPLIB/n3mm', 'xlib')
+fprintf('still working...');
+
+save_instance('data/PSPLIB/r1mm', 'xlib')
+fprintf('...');
+save_instance('data/PSPLIB/r3mm', 'xlib')
+fprintf('...');
+save_instance('data/PSPLIB/r4mm', 'xlib')
+fprintf('...');
+save_instance('data/PSPLIB/r5mm', 'xlib')
+fprintf('still working...');
+
 save_instance('data/mmlib50', 'xlib')
 fprintf('...');
 save_instance('data/mmlib100', 'xlib')
