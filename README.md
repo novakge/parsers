@@ -50,12 +50,11 @@ Parsers for multiple project datasets like PSPLIB (ProGen), MMLIB (RanGen1/2), R
     
 4.5 Export parsed data to *.mat files (batch process all files in a directory)
     It is possible to export the parsed data to *.mat files, including the desired runtime/workspace variables for all type of trade-off problems (NTP,CTP,DTP) automatically or manually.
-    Please note, the "RG300" dataset is corrected, as new line characters were present in longer lines and now stored in "RG300_corr" folder. Verification of this dataset is still in progress.
     input: folder containing datasets for parsing and exporting to *.mat
     example: >> save_rangen('data/Patterson')
     example output: ../data/Patterson_output containing all the converted matlab binaries *.mat for all trade-off problem type with naming like *_NTP.mat, *_DTP.mat *_CTP.mat and *_DSM.mat.
 
-4.5 Export all datasets
+4.6 Export all datasets
     It is also possible to batch process all datasets with the available parsers.
     input: existing data folder
     example: >> save_all
@@ -88,6 +87,7 @@ Note: ../test_data contains the necessary input files for the provided unit test
 - 1.0 initial revision: documenting rangenx_v2 and protrack parsers, NovakG, 18.05.2018.
 - 1.1 update for all-in-one parser like folder names, add psplib/mmlib support etc., NovakG, 14.08.2018.
 - 1.2 minor update after adding Boctor dataset, NovakG, 18.03.2021.
+- 1.3 minor update, remark for RG300(_corr) removed, NovakG, 17.04.2023.
 
 
 8. Links, useful docs
@@ -103,7 +103,7 @@ Note: ../test_data contains the necessary input files for the provided unit test
 
 9. Authors
 
-Gergely Novák, 2018-2021
+Gergely Novák, 2018-2023
 
 10. Contribution
 
