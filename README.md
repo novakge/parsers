@@ -30,35 +30,53 @@ Parsers for multiple project datasets like PSPLIB (ProGen), MMLIB (RanGen1/2), R
 4. Features and examples
 
 4.1 Parse RanGen 1-2 (Patterson format) files in Matlab
+    
     input: file with patterson format (e.g. *.rcp)
+    
     example: >> PDM = parse_rangen('data/Patterson/pat80.rcp', 1) where 1=NTP trade-off problem type (single mode)
+    
     output: PDM file containing PDM = [DSM,TD,CD,{QD,RD}], format depending on the selected simulation type (trade-off problem)
 
 4.2 Parse ProTrack files in Matlab
+    
     input: file with protrack format (e.g. *.p2x) in xml
+    
     example: >> PDM = parse_protrack('data/protrack/C2011-09 Commercial IT Project.p2x',1) where 1=NTP trade-off problem type (single mode)
+    
     output: PDM file containing PDM = [DSM,TD,CD,{QD,RD}], format depending on the selected simulation type (trade-off problem)
 
 4.3 Parse PSPLIB or MMLIB files in Matlab
+    
     input: file with PSPLIB/MMLIB library format (e.g. *.mm)
+    
     example: >> PDM = parse_xlib('data/mmlib100',1) where 1=NTP, 2=CTP, 3=DTP simulation trade-off problem type (multi-mode)
+    
     output: PDM file containing PDM = [DSM,TD,CD,{QD,RD}], format depending on the selected simulation type (trade-off problem)
     
 4.4 Parse Boctor files in Matlab
+   
     input: file with Boctor library format (e.g. *.prb)
+    
     example: >> PDM = parse_boctor('data/boctor100',1) where 1=NTP, 2=CTP, 3=DTP simulation trade-off problem type (multi-mode)
+    
     output: PDM file containing PDM = [DSM,TD,CD,{QD,RD}], format depending on the selected simulation type (trade-off problem)
     
 4.5 Export parsed data to *.mat files (batch process all files in a directory)
     It is possible to export the parsed data to *.mat files, including the desired runtime/workspace variables for all type of trade-off problems (NTP,CTP,DTP) automatically or manually.
+    
     input: folder containing datasets for parsing and exporting to *.mat
+    
     example: >> save_rangen('data/Patterson')
+    
     example output: ../data/Patterson_output containing all the converted matlab binaries *.mat for all trade-off problem type with naming like *_NTP.mat, *_DTP.mat *_CTP.mat and *_DSM.mat.
 
 4.6 Export all datasets
     It is also possible to batch process all datasets with the available parsers.
+    
     input: existing data folder
+    
     example: >> save_all
+    
     example output: ../data/<dataset_folder>_output containing all the converted matlab binaries *.mat for all supported trade-off problem types for the specific dataset with naming like *_NTP.mat, *_DTP.mat *_CTP.mat *_DSM.mat.
 
 
@@ -67,9 +85,11 @@ Parsers for multiple project datasets like PSPLIB (ProGen), MMLIB (RanGen1/2), R
 Each folder contains the relevant unit tests for the parsers.
 To run the corresponding unit tests:
 
-examples: >> results = run(parse_rangen_test) or equivalent >> runtests('parse_rangen_test')
-examples: >> results = run(parse_protrack_test) or equivalent >> runtests('parse_protrack_test')
-examples: >> results = run(parse_xlib_test) or equivalent >> runtests('parse_xlib_test')
+    examples: >> results = run(parse_rangen_test) or equivalent >> runtests('parse_rangen_test')
+    
+    examples: >> results = run(parse_protrack_test) or equivalent >> runtests('parse_protrack_test')
+    
+    examples: >> results = run(parse_xlib_test) or equivalent >> runtests('parse_xlib_test')
 
 Note: ../test_data contains the necessary input files for the provided unit tests.
 
