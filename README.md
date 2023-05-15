@@ -21,7 +21,9 @@ Parsers for multiple project datasets like PSPLIB (ProGen), MMLIB (RanGen1/2), R
 ├── src                   <- Code directory for matlab source files
 ├── data                  <- Containing several standard datasets
 │   ├── e.g. j30          <- Folder of example dataset
+│   ├── e.g. j30_out      <- Example (parsed) result data output folder
 │   ├── e.g. mmlib50      <- Folder of example dataset
+│   ├── ...               <- ...
 ├── doc                   <- Contains additional documentation, results, info etc.
 ├── test_data             <- Directory for test related datasets, mat files etc.
 ├── tool                  <- Contains additional tools, converters, generators etc.
