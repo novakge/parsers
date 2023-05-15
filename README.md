@@ -17,7 +17,8 @@ Parsers for multiple project datasets like PSPLIB (ProGen), MMLIB (RanGen1/2), R
  
 3.1 Folders
 ```
-├                         <- Root directory for all matlab source files
+├                         <- Root directory
+├── src                   <- Code directory for matlab source files
 ├── data                  <- Containing several standard datasets
 │   ├── e.g. j30          <- Folder of example dataset
 │   ├── e.g. mmlib50      <- Folder of example dataset
@@ -88,6 +89,7 @@ Note: ../test_data contains the necessary input files for the provided unit test
 - 1.1 update for all-in-one parser like folder names, add psplib/mmlib support etc., NovakG, 14.08.2018.
 - 1.2 minor update after adding Boctor dataset, NovakG, 18.03.2021.
 - 1.3 minor update, remark for RG300(_corr) removed, NovakG, 17.04.2023.
+- 1.4 minor update for code structure according to guideline and authors
 
 
 8. Links, useful docs
@@ -103,7 +105,7 @@ Note: ../test_data contains the necessary input files for the provided unit test
 
 9. Authors
 
-Gergely Novák, 2018-2023
+Gergely Novák, Zsolt Tibor Kosztyán, 2018-2023
 
 10. Contribution
 
@@ -111,4 +113,4 @@ Please contact before making a pull request.
 
 11. License
 
-This project is licensed under the terms of the MIT license.
+This project is licensed under the terms of the GNU General Public License v3.0.
