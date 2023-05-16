@@ -3,7 +3,7 @@
 function save_all_progen
 tic;
 fprintf('in progress...');
-save_instance('data/progen_001', 'progen')
+save_instance('../data/progen_001', 'progen')
 fprintf('...');
 fprintf('done!\n');
 toc;

@@ -31,7 +31,7 @@ switch parser_type
     case 'xlib'
         if exist('parse_xlib') % MMLIB, PSPLIB
             parser = @parse_xlib; % create common function handle
-            extension_filter = '*.?m'; % select extension *.sm or *.mm depending on single/multimode instances
+            extension_filter = '*.*m'; % select extension *.sm or *.mm depending on single/multimode instances
         end
         multiproject = 0;
 
@@ -69,7 +69,7 @@ files = dir(browse_dir);
 
 out_dir = strcat(current_folder,'/',child_folder,'_output','/'); % same level as input directory
 
-if exist(directory, 'dir')
+if isfolder(directory) % check if dataset exists
    mkdir(out_dir);
 else
    warning('%s directory does not exist!\n', directory);
@@ -111,5 +111,4 @@ for i=1:size(files,1) % iterate through all files in given directory
     
     end % simulation types
 end % all files
-
 

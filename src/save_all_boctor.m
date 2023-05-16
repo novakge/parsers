@@ -4,9 +4,9 @@
 function save_all_boctor
 tic;
 fprintf('in progress...');
-save_instance('data/boctor50', 'boctor')
+save_instance('../data/boctor50', 'boctor')
 fprintf('still working...');
-save_instance('data/boctor100', 'boctor')
+save_instance('../data/boctor100', 'boctor')
 fprintf('done!\n');
 toc;
 

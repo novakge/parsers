@@ -3,7 +3,7 @@
 function save_all_protrack
 tic;
 fprintf('in progress...');
-save_instance('data/protrack', 'protrack')
+save_instance('../data/protrack', 'protrack')
 fprintf('...');
 fprintf('still working...');
 fprintf('done!\n');
