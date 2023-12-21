@@ -50,6 +50,10 @@ fprintf('...');
 save_instance('../data/PSPLIB/r5mm', 'xlib')
 fprintf('still working...');
 
+fprintf('...');
+save_instance('../data/MMFF', 'xlib')
+fprintf('still working...');
+
 save_instance('../data/mmlib50', 'xlib')
 fprintf('...');
 save_instance('../data/mmlib100', 'xlib')
