@@ -20,6 +20,12 @@ save_instance('../data/PSPLIB/j10mm', 'xlib')
 fprintf('...');
 save_instance('../data/PSPLIB/j12mm', 'xlib')
 fprintf('...');
+save_instance('../data/PSPLIB/j14mm', 'xlib')
+fprintf('...');
+save_instance('../data/PSPLIB/j16mm', 'xlib')
+fprintf('...');
+save_instance('../data/PSPLIB/j18mm', 'xlib')
+fprintf('...');
 save_instance('../data/PSPLIB/j20mm', 'xlib')
 fprintf('...');
 save_instance('../data/PSPLIB/j30mm', 'xlib')
